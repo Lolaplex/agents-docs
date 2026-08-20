@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agents-docs"
+version = "0.42.0"
+description = "Ultra-fast, zero-bloat local markdown documentation RAG for AI coding agents via MCP"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [
+    { name = "Felix Kempf" },
+]
+requires-python = ">=3.10"
+dependencies = [
+    "mcp>=1.0.0,<2",
+]
+keywords = ["mcp", "agents", "docs", "documentation", "rag", "bm25", "coding-assistant", "cursor", "claude"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Documentation",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.urls]
+Homepage = "https://github.com/Lolaplex/agents-docs"
+Repository = "https://github.com/Lolaplex/agents-docs"
+Documentation = "https://github.com/Lolaplex/agents-docs/tree/main/abi"
+"Bug Tracker" = "https://github.com/Lolaplex/agents-docs/issues"
+
+[project.scripts]
+agents-docs = "agents_docs.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"agents_docs" = [
+    "bundled/**/*",
+]
