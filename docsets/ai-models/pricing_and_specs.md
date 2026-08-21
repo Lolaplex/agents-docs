@@ -153,7 +153,7 @@ Real-time model identifiers, context limits, and token pricing ($ per 1 Million 
 | `deepseek/deepseek-v3.1-terminus` | **DeepSeek: DeepSeek V3.1 Terminus** | 163,840 | $0.27 | $1.00 |
 | `deepseek/deepseek-v3.2` | **DeepSeek: DeepSeek V3.2** | 163,840 | $0.27 | $0.40 |
 | `deepseek/deepseek-v3.2-exp` | **DeepSeek: DeepSeek V3.2 Exp** | 163,840 | $0.27 | $0.41 |
-| `deepseek/deepseek-v4-flash` | **DeepSeek: DeepSeek V4 Flash 0423** | 1,048,576 | $0.08 | $0.16 |
+| `deepseek/deepseek-v4-flash` | **DeepSeek: DeepSeek V4 Flash 0423** | 1,048,576 | $0.08 | $0.15 |
 | `deepseek/deepseek-v4-flash-0731` | **DeepSeek: DeepSeek V4 Flash 0731** | 1,310,720 | $0.14 | $0.28 |
 | `deepseek/deepseek-v4-pro` | **DeepSeek: DeepSeek V4 Pro 0423** | 1,048,576 | $1.60 | $3.20 |
 | `deepseek/deepseek-v4-pro-0813` | **DeepSeek: DeepSeek V4 Pro 0813** | 1,048,576 | $1.19 | $3.56 |
