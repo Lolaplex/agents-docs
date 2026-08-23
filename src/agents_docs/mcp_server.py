@@ -83,16 +83,35 @@ def search_docs(query: str, docset: str = "all", top_k: int = 4) -> str:
     if clean_docset != "all" and clean_docset != "*":
         _ensure_docset_fresh(clean_docset)
 
-    results = engine.search(docset=clean_docset, query=query, top_k=top_k)
+    search_data = engine.search_detailed(docset=clean_docset, query=query, top_k=top_k)
+    results = search_data["results"]
+    missing_terms = search_data.get("missing_terms", [])
+
     if not results:
-        return f"No matching sections found in docset '{docset}' for query: '{query}'."
+        installed = [d["name"] for d in store.list_docsets()]
+        msg = f"No matching sections found in docset '{docset}' for query: '{query}'."
+        if installed:
+            msg += f"\nInstalled docsets: {', '.join(installed)}."
+        msg += "\nTip: Run `list_catalog()` to check available framework docsets, or `sync_docset(name='...')` to install missing official docs."
+        return msg
 
     formatted = []
     for r in results:
         formatted.append(
             f"### [{r['docset']}] {r['file']}#L{r['line']} — {r['header']} (Score: {r['score']})\n\n{r['snippet']}\n"
         )
-    return "\n---\n\n".join(formatted)
+    output = "\n---\n\n".join(formatted)
+
+    if missing_terms:
+        meaningful_missing = [t for t in missing_terms if len(t) > 2 and t not in {"the", "and", "for", "with", "how", "all", "get", "api", "use"}]
+        if meaningful_missing:
+            output += (
+                f"\n---\n💡 [agents-docs notice]: No direct matches for term(s): {', '.join(meaningful_missing)} in searched docsets.\n"
+                f"• If querying multiple distinct providers/libraries, query each individually or verify if a dedicated docset exists via `list_catalog()` / `list_docsets()`.\n"
+                f"• To install additional official docs: `sync_docset(name='...')` or `sync_docset(name='<custom>', url='<llms.txt-url>')`.\n"
+            )
+
+    return output
 
 
 @mcp.tool()

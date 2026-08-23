@@ -1,4 +1,4 @@
-# Frontier AI Models: Profiles & Capabilities (2026-08-20)
+# Frontier AI Models: Profiles & Capabilities (2026-08-23)
 
 Detailed analysis of the latest closed and hosted API frontier models.
 

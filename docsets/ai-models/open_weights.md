@@ -1,4 +1,4 @@
-# Open-Weights & Local AI Models Guide (2026-08-20)
+# Open-Weights & Local AI Models Guide (2026-08-23)
 
 Specs for running models locally (Ollama, vLLM, SGLang, llama.cpp) or via open inference providers.
 

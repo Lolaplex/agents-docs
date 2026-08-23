@@ -1,4 +1,4 @@
-# Live AI Models Pricing & Specifications (2026-08-20)
+# Live AI Models Pricing & Specifications (2026-08-23)
 
 Real-time model identifiers, context limits, and token pricing ($ per 1 Million tokens) directly from the live model registry.
 
@@ -76,16 +76,15 @@ Real-time model identifiers, context limits, and token pricing ($ per 1 Million 
 | `openai/gpt-5.5-pro` | **OpenAI: GPT-5.5 Pro** | 1,050,000 | $30.00 | $180.00 |
 | `openai/gpt-5.6-luna` | **OpenAI: GPT-5.6 Luna** | 1,050,000 | $0.20 | $1.20 |
 | `openai/gpt-5.6-luna-pro` | **OpenAI: GPT-5.6 Luna Pro** | 1,050,000 | $0.20 | $1.20 |
-| `openai/gpt-5.6-sol` | **OpenAI: GPT-5.6 Sol** | 1,050,000 | $2.50 | $15.00 |
-| `openai/gpt-5.6-sol-pro` | **OpenAI: GPT-5.6 Sol Pro** | 1,050,000 | $2.50 | $15.00 |
+| `openai/gpt-5.6-sol` | **OpenAI: GPT-5.6 Sol** | 1,050,000 | $2.00 | $10.00 |
+| `openai/gpt-5.6-sol-pro` | **OpenAI: GPT-5.6 Sol Pro** | 1,050,000 | $2.00 | $10.00 |
 | `openai/gpt-5.6-terra` | **OpenAI: GPT-5.6 Terra** | 1,050,000 | $2.00 | $12.00 |
 | `openai/gpt-5.6-terra-pro` | **OpenAI: GPT-5.6 Terra Pro** | 1,050,000 | $2.00 | $12.00 |
 | `openai/gpt-audio` | **OpenAI: GPT Audio** | 128,000 | $2.50 | $10.00 |
 | `openai/gpt-audio-mini` | **OpenAI: GPT Audio Mini** | 128,000 | $0.60 | $2.40 |
 | `openai/gpt-chat-latest` | **OpenAI: GPT Chat Latest** | 400,000 | $5.00 | $30.00 |
-| `openai/gpt-oss-120b` | **OpenAI: gpt-oss-120b** | 131,072 | $0.03 | $0.17 |
+| `openai/gpt-oss-120b` | **OpenAI: gpt-oss-120b** | 131,072 | $0.04 | $0.17 |
 | `openai/gpt-oss-20b` | **OpenAI: gpt-oss-20b** | 131,072 | $0.03 | $0.13 |
-| `openai/gpt-oss-20b:free` | **OpenAI: gpt-oss-20b (free)** | 131,072 | $0.00 | $0.00 |
 | `openai/gpt-oss-safeguard-20b` | **OpenAI: gpt-oss-safeguard-20b** | 131,072 | $0.07 | $0.30 |
 | `openai/o1` | **OpenAI: o1** | 200,000 | $15.00 | $60.00 |
 | `openai/o1-pro` | **OpenAI: o1-pro** | 200,000 | $150.00 | $600.00 |
@@ -95,7 +94,7 @@ Real-time model identifiers, context limits, and token pricing ($ per 1 Million 
 | `openai/o3-pro` | **OpenAI: o3 Pro** | 200,000 | $20.00 | $80.00 |
 | `openai/o4-mini` | **OpenAI: o4 Mini** | 200,000 | $1.10 | $4.40 |
 | `openai/o4-mini-high` | **OpenAI: o4 Mini High** | 200,000 | $1.10 | $4.40 |
-| `~openai/gpt-latest` | **OpenAI GPT Latest** | 1,050,000 | $2.50 | $15.00 |
+| `~openai/gpt-latest` | **OpenAI GPT Latest** | 1,050,000 | $2.00 | $10.00 |
 | `~openai/gpt-mini-latest` | **OpenAI GPT Mini Latest** | 400,000 | $0.75 | $4.50 |
 
 ---
@@ -131,7 +130,7 @@ Real-time model identifiers, context limits, and token pricing ($ per 1 Million 
 | `google/gemma-3n-e4b-it` | **Google: Gemma 3n 4B** | 32,768 | $0.06 | $0.12 |
 | `google/gemma-4-26b-a4b-it` | **Google: Gemma 4 26B A4B ** | 262,144 | $0.07 | $0.34 |
 | `google/gemma-4-26b-a4b-it:free` | **Google: Gemma 4 26B A4B  (free)** | 262,144 | $0.00 | $0.00 |
-| `google/gemma-4-31b-it` | **Google: Gemma 4 31B** | 262,144 | $0.09 | $0.34 |
+| `google/gemma-4-31b-it` | **Google: Gemma 4 31B** | 262,144 | $0.10 | $0.34 |
 | `google/gemma-4-31b-it:free` | **Google: Gemma 4 31B (free)** | 262,144 | $0.00 | $0.00 |
 | `google/lyria-3-clip-preview` | **Google: Lyria 3 Clip Preview** | 1,048,576 | $0.00 | $0.00 |
 | `google/lyria-3-pro-preview` | **Google: Lyria 3 Pro Preview** | 1,048,576 | $0.00 | $0.00 |
@@ -146,18 +145,19 @@ Real-time model identifiers, context limits, and token pricing ($ per 1 Million 
 |---|---|---|---|---|
 | `deepseek/deepseek-chat` | **DeepSeek: DeepSeek V3** | 163,840 | $0.26 | $1.03 |
 | `deepseek/deepseek-chat-v3-0324` | **DeepSeek: DeepSeek V3 0324** | 163,840 | $0.25 | $1.00 |
-| `deepseek/deepseek-chat-v3.1` | **DeepSeek: DeepSeek V3.1** | 163,840 | $0.25 | $0.95 |
+| `deepseek/deepseek-chat-v3.1` | **DeepSeek: DeepSeek V3.1** | 163,840 | $0.55 | $1.65 |
 | `deepseek/deepseek-r1` | **DeepSeek: R1** | 64,000 | $0.70 | $2.50 |
 | `deepseek/deepseek-r1-0528` | **DeepSeek: R1 0528** | 163,840 | $0.50 | $2.15 |
 | `deepseek/deepseek-r1-distill-llama-70b` | **DeepSeek: R1 Distill Llama 70B** | 8,192 | $0.80 | $0.80 |
 | `deepseek/deepseek-v3.1-terminus` | **DeepSeek: DeepSeek V3.1 Terminus** | 163,840 | $0.27 | $1.00 |
-| `deepseek/deepseek-v3.2` | **DeepSeek: DeepSeek V3.2** | 163,840 | $0.27 | $0.40 |
+| `deepseek/deepseek-v3.2` | **DeepSeek: DeepSeek V3.2** | 163,840 | $0.26 | $0.38 |
 | `deepseek/deepseek-v3.2-exp` | **DeepSeek: DeepSeek V3.2 Exp** | 163,840 | $0.27 | $0.41 |
-| `deepseek/deepseek-v4-flash` | **DeepSeek: DeepSeek V4 Flash 0423** | 1,048,576 | $0.08 | $0.16 |
-| `deepseek/deepseek-v4-flash-0731` | **DeepSeek: DeepSeek V4 Flash 0731** | 1,310,720 | $0.14 | $0.28 |
-| `deepseek/deepseek-v4-pro` | **DeepSeek: DeepSeek V4 Pro 0423** | 1,048,576 | $1.60 | $3.20 |
-| `deepseek/deepseek-v4-pro-0813` | **DeepSeek: DeepSeek V4 Pro 0813** | 1,048,576 | $1.19 | $3.56 |
-| `~deepseek/deepseek-v4-flash-latest` | **DeepSeek V4 Flash Latest** | 1,310,720 | $0.07 | $0.14 |
+| `deepseek/deepseek-v4-flash` | **DeepSeek: DeepSeek V4 Flash 0423** | 1,048,576 | $0.05 | $0.10 |
+| `deepseek/deepseek-v4-flash-0731` | **DeepSeek: DeepSeek V4 Flash 0731** | 1,310,720 | $0.08 | $0.18 |
+| `deepseek/deepseek-v4-flash-vision-exp` | **DeepSeek: DeepSeek V4 Flash Vision Exp** | 1,048,576 | $0.22 | $0.66 |
+| `deepseek/deepseek-v4-pro` | **DeepSeek: DeepSeek V4 Pro 0423** | 1,048,576 | $0.40 | $0.79 |
+| `deepseek/deepseek-v4-pro-0813` | **DeepSeek: DeepSeek V4 Pro 0813** | 1,048,576 | $1.12 | $3.37 |
+| `~deepseek/deepseek-v4-flash-latest` | **DeepSeek V4 Flash Latest** | 1,310,720 | $0.04 | $0.13 |
 
 ---
 
@@ -182,7 +182,7 @@ Real-time model identifiers, context limits, and token pricing ($ per 1 Million 
 | `mistralai/mistral-small-24b-instruct-2501` | **Mistral: Mistral Small 3** | 32,768 | $0.05 | $0.08 |
 | `mistralai/mistral-small-2603` | **Mistral: Mistral Small 4** | 262,144 | $0.15 | $0.60 |
 | `mistralai/mistral-small-3.1-24b-instruct` | **Mistral: Mistral Small 3.1 24B** | 128,000 | $0.35 | $0.55 |
-| `mistralai/mistral-small-3.2-24b-instruct` | **Mistral: Mistral Small 3.2 24B** | 256,000 | $0.09 | $0.25 |
+| `mistralai/mistral-small-3.2-24b-instruct` | **Mistral: Mistral Small 3.2 24B** | 131,072 | $0.07 | $0.20 |
 | `mistralai/mixtral-8x22b-instruct` | **Mistral: Mixtral 8x22B Instruct** | 65,536 | $2.00 | $6.00 |
 | `mistralai/voxtral-small-24b-2507` | **Mistral: Voxtral Small 24B 2507** | 32,000 | $0.10 | $0.30 |
 | `qwen/qwen-2.5-72b-instruct` | **Qwen2.5 72B Instruct** | 32,768 | $0.36 | $0.40 |
@@ -196,7 +196,7 @@ Real-time model identifiers, context limits, and token pricing ($ per 1 Million 
 | `qwen/qwen3-235b-a22b` | **Qwen: Qwen3 235B A22B** | 131,072 | $0.45 | $1.82 |
 | `qwen/qwen3-235b-a22b-2507` | **Qwen: Qwen3 235B A22B Instruct 2507** | 262,144 | $0.09 | $0.55 |
 | `qwen/qwen3-235b-a22b-thinking-2507` | **Qwen: Qwen3 235B A22B Thinking 2507** | 262,144 | $0.23 | $2.30 |
-| `qwen/qwen3-30b-a3b` | **Qwen: Qwen3 30B A3B** | 131,072 | $0.13 | $0.52 |
+| `qwen/qwen3-30b-a3b` | **Qwen: Qwen3 30B A3B** | 131,072 | $0.12 | $0.50 |
 | `qwen/qwen3-30b-a3b-instruct-2507` | **Qwen: Qwen3 30B A3B Instruct 2507** | 262,144 | $0.05 | $0.19 |
 | `qwen/qwen3-30b-a3b-thinking-2507` | **Qwen: Qwen3 30B A3B Thinking 2507** | 81,920 | $0.20 | $2.40 |
 | `qwen/qwen3-32b` | **Qwen: Qwen3 32B** | 131,072 | $0.08 | $0.28 |
@@ -208,7 +208,7 @@ Real-time model identifiers, context limits, and token pricing ($ per 1 Million 
 | `qwen/qwen3-coder-plus` | **Qwen: Qwen3 Coder Plus** | 1,000,000 | $0.65 | $3.25 |
 | `qwen/qwen3-max` | **Qwen: Qwen3 Max** | 262,144 | $0.78 | $3.90 |
 | `qwen/qwen3-max-thinking` | **Qwen: Qwen3 Max Thinking** | 262,144 | $0.78 | $3.90 |
-| `qwen/qwen3-next-80b-a3b-instruct` | **Qwen: Qwen3 Next 80B A3B Instruct** | 262,144 | $0.09 | $1.10 |
+| `qwen/qwen3-next-80b-a3b-instruct` | **Qwen: Qwen3 Next 80B A3B Instruct** | 262,144 | $0.10 | $1.10 |
 | `qwen/qwen3-next-80b-a3b-thinking` | **Qwen: Qwen3 Next 80B A3B Thinking** | 262,144 | $0.15 | $1.20 |
 | `qwen/qwen3-vl-235b-a22b-instruct` | **Qwen: Qwen3 VL 235B A22B Instruct** | 262,144 | $0.21 | $1.90 |
 | `qwen/qwen3-vl-235b-a22b-thinking` | **Qwen: Qwen3 VL 235B A22B Thinking** | 131,072 | $0.40 | $4.00 |
@@ -234,5 +234,5 @@ Real-time model identifiers, context limits, and token pricing ($ per 1 Million 
 | `qwen/qwen3.7-max` | **Qwen: Qwen3.7 Max** | 1,000,000 | $1.48 | $4.42 |
 | `qwen/qwen3.7-plus` | **Qwen: Qwen3.7 Plus** | 1,000,000 | $0.32 | $1.28 |
 | `qwen/qwen3.8-2.4t-a95b` | **Qwen: Qwen3.8 2.4T A95B** | 1,048,576 | $2.00 | $6.00 |
-| `qwen/qwen3.8-27b` | **Qwen: Qwen3.8 27B** | 1,000,000 | $0.45 | $3.20 |
+| `qwen/qwen3.8-27b` | **Qwen: Qwen3.8 27B** | 1,000,000 | $0.40 | $3.00 |
 | `qwen/qwen3.8-max` | **Qwen: Qwen3.8 Max** | 1,000,000 | $2.00 | $6.00 |

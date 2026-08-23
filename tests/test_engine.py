@@ -62,6 +62,22 @@ In Svelte 4 you used `let count = 0;` which is now deprecated.
         self.assertGreater(len(results), 0)
         self.assertEqual(results[0]["docset"], "fastapi")
 
+    def test_search_detailed_and_missing_terms(self):
+        detailed = self.engine.search_detailed(docset="svelte-5", query="$state non_existent_custom_term_xyz")
+        self.assertGreater(len(detailed["results"]), 0)
+        self.assertIn("non_existent_custom_term_xyz", detailed["missing_terms"])
+
+    def test_breadcrumb_hierarchy(self):
+        md = """# Azure Speech Service
+## Text to Speech
+### Limits
+Maximum 10,000 characters per request.
+"""
+        self.store.save_document("azure", "speech.md", md)
+        results = self.engine.search(docset="azure", query="azure speech limits")
+        self.assertGreater(len(results), 0)
+        self.assertIn("Azure Speech Service > Text to Speech > Limits", results[0]["header"])
+
 
 if __name__ == "__main__":
     unittest.main()

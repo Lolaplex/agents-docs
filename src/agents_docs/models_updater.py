@@ -1,7 +1,7 @@
 """
-Live AI Models Documentation Generator & Synchronizer.
-Fetches real-time model catalog, token pricing, context windows, and providers from OpenRouter API
-and builds comprehensive markdown documentation in ~/.agents/docs/ai-models/.
+Live AI Models & Multi-Modal AI Ecosystem Documentation Generator & Synchronizer.
+Generates comprehensive specs for LLMs, Image/Vision generation, Speech/TTS/STT,
+Embeddings/Rerankers, and Azure AI Cloud Services.
 """
 
 from __future__ import annotations
@@ -29,8 +29,8 @@ def fetch_live_models() -> List[Dict[str, Any]]:
 
 def generate_live_model_docs(models: Optional[List[Dict[str, Any]]] = None) -> Dict[str, str]:
     """
-    Generate comprehensive markdown documents for all latest AI models,
-    including live pricing, context windows, benchmarks, and routing guides.
+    Generate comprehensive markdown documents for all AI modalities:
+    LLMs, Image/Vision, Speech/Audio/TTS, Embeddings/Rerankers, and Azure AI Services.
     """
     if models is None:
         try:
@@ -41,18 +41,17 @@ def generate_live_model_docs(models: Optional[List[Dict[str, Any]]] = None) -> D
     now_iso = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
     # Filter and group models
-    anthropic = [m for m in models if "anthropic" in m["id"] and not ":batch" in m["id"]]
-    openai = [m for m in models if ("openai" in m["id"] or "~openai" in m["id"]) and not ":batch" in m["id"]]
-    google = [m for m in models if ("google" in m["id"] or "~google" in m["id"]) and not ":batch" in m["id"]]
-    deepseek = [m for m in models if "deepseek" in m["id"] and not ":batch" in m["id"]]
-    qwen = [m for m in models if "qwen" in m["id"] and not ":batch" in m["id"]]
-    mistral = [m for m in models if "mistral" in m["id"] and not ":batch" in m["id"]]
+    anthropic = [m for m in models if "anthropic" in m.get("id", "") and not ":batch" in m.get("id", "")]
+    openai = [m for m in models if ("openai" in m.get("id", "") or "~openai" in m.get("id", "")) and not ":batch" in m.get("id", "")]
+    google = [m for m in models if ("google" in m.get("id", "") or "~google" in m.get("id", "")) and not ":batch" in m.get("id", "")]
+    deepseek = [m for m in models if "deepseek" in m.get("id", "") and not ":batch" in m.get("id", "")]
+    qwen = [m for m in models if "qwen" in m.get("id", "") and not ":batch" in m.get("id", "")]
+    mistral = [m for m in models if "mistral" in m.get("id", "") and not ":batch" in m.get("id", "")]
 
-    # Helper to render table rows
     def render_rows(model_list: List[Dict[str, Any]]) -> str:
         lines = []
-        for m in sorted(model_list, key=lambda x: x["id"]):
-            m_id = m["id"]
+        for m in sorted(model_list, key=lambda x: x.get("id", "")):
+            m_id = m.get("id", "")
             name = m.get("name", m_id)
             ctx = f"{m.get('context_length', 0):,}"
             p_in = float(m.get("pricing", {}).get("prompt", 0)) * 1_000_000
@@ -61,50 +60,361 @@ def generate_live_model_docs(models: Optional[List[Dict[str, Any]]] = None) -> D
         return "\n".join(lines) if lines else "| - | No live data | - | - | - |"
 
     # 1. OVERVIEW.MD
-    overview_md = f"""# AI Models & LLM Landscape (Live Updated: {now_iso})
+    overview_md = f"""# AI Models & Multi-Modal Intelligence Landscape (Live Updated: {now_iso})
 
 ## Overview
-This documentation set provides live and accurate specifications of current frontier and open-weights Artificial Intelligence (AI) models, reasoning models, context limits, real-time pricing ($/1M tokens), benchmarks, and agent task routing.
+This documentation set provides live and accurate specifications of current frontier and open-weights Artificial Intelligence (AI) models, reasoning engines, image & vision generators, speech/audio synthesis & transcription services, embedding & reranking models, and cloud AI platforms (Azure AI, OpenAI, Google, Anthropic, ElevenLabs).
 
-AI assistants reference these documents to select the most capable and cost-effective model for coding, refactoring, long-context ingestion, and sub-agent task execution.
+AI assistants and developer agents reference these documents to query exact limits, request constraints, rate limits, token and character pricing, and task routing.
 
-## Frontier Generations & Flagships ({now_iso})
+## Multi-Modal Landscape ({now_iso})
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                           CURRENT AI MODEL GENERATIONS                      │
+│                           AI MODALITIES & CAPABILITIES                      │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ 1. ANTHROPIC FRONTIER                                                       │
-│    • Claude Opus 5 & Claude Opus 4.8 / 4.7 / 4.6 (1M context flagship)      │
-│    • Claude Sonnet 5 & Claude Sonnet 4.6 / 4.5 (Top-tier agentic coding)   │
-│    • Claude Fable 5 & Claude Haiku 4.5 (High-speed & creative synthesis)   │
+│ 1. FRONTIER LLMS & REASONING                                                │
+│    • Anthropic: Claude Sonnet 5 / 3.7 / 4.6 (Agentic coding, hybrid think)  │
+│    • OpenAI: o3, o3-pro, o4-mini (Test-time compute reasoning), GPT-5/4.5   │
+│    • Google: Gemini 3.7 Flash & 3.1 Pro (1M-2M context, native multimodal)  │
+│    • DeepSeek: V4 Flash, V3.2, DeepSeek R1 (MLA high-throughput reasoning)  │
+│    • Open Weights: Qwen 2.5 Coder 32B, Gemma 4, Llama 3.3 70B               │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ 2. OPENAI FRONTIER & REASONING                                              │
-│    • GPT-5.6 Terra Pro / GPT-5 (Massive foundational scale, 1M+ context)    │
-│    • o3, o3-pro, o4-mini (Championship reasoning, test-time compute)       │
-│    • GPT-4.6, GPT-4.5, GPT-4o (Omni multimodal standard)                    │
+│ 2. SPEECH, AUDIO & TTS ENGINES                                              │
+│    • Azure AI Speech: Neural voices, SSML (64k chars), REST (10k chars)     │
+│    • ElevenLabs: Turbo v2.5, Flash v2.5 (2.5k - 10k chars, WebSocket stream)│
+│    • OpenAI: tts-1, tts-1-hd (4,096 chars limit), Whisper (25MB audio limit)│
+│    • Google Cloud TTS: Journey/Neural2 (5,000 chars limit), Gemini Live     │
+│    • Ultra-Low Latency: Cartesia Sonic (~90ms), Deepgram Aura (~100ms)      │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ 3. GOOGLE GEMINI ECOSYSTEM                                                  │
-│    • Gemini 3.7 Flash & Gemini 3.6 / 3.5 Flash (Ultra-fast, 1M context)     │
-│    • Gemini 3.1 Pro & Gemini 2.5 Pro (Deep reasoning, 1M - 2M context)     │
-│    • Gemma 4 & Gemma 3 (SOTA open multimodal weights)                       │
+│ 3. IMAGE, VISION & DESIGN GENERATION                                        │
+│    • Black Forest Labs: FLUX.1 [schnell, dev, pro], FLUX 1.1 Pro (2K res)  │
+│    • Midjourney: v6.1, v7, Niji 6 (Photorealism, aesthetic control)         │
+│    • Ideogram: v2 & v2 Turbo (Industry gold standard for image typography)  │
+│    • DALL-E 3 & Google Imagen 3 (Prompt fidelity, HD rendering)             │
+│    • Recraft v3 (Native Vector SVG, brand palettes, icons)                  │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ 4. DEEPSEEK & OPEN-WEIGHTS SPEED KINGS                                      │
-│    • DeepSeek V4 Flash (1.3M context, extreme throughput & efficiency)      │
-│    • DeepSeek V3.2 / V3.1 Terminus & DeepSeek R1 (Open reasoning)           │
-│    • Qwen 2.5 Coder 32B / Qwen 3 (Local consumer GPU coding standard)       │
+│ 4. EMBEDDINGS, VECTOR SEARCH & RERANKERS                                    │
+│    • OpenAI: text-embedding-3-small (1536d) & large (3072d, 8191 tokens)   │
+│    • Cohere: Embed v3 (1024d) & Rerank v3.5 (4096 tokens cross-encoder)     │
+│    • Voyage AI: voyage-3 (1024d, 32k tokens), voyage-code-3 (1536d, code)   │
+│    • Open Weights: BGE-M3 (dense/sparse/colbert), Jina Embeddings v3        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 5. CLOUD AI ECOSYSTEMS (AZURE AI & OPENAI)                                  │
+│    • Azure OpenAI Service: TPM/RPM quotas, PTU provisioning, content safety │
+│    • Azure AI Search: Hybrid search, BM25 + Vector + Semantic Ranker        │
+│    • Azure Document Intelligence & Computer Vision OCR                      │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ## Navigation
 - [Frontier Closed Models](frontier_models.md)
 - [Open-Weights & Local Deployment](open_weights.md)
+- [Speech, Audio & TTS Systems](speech_and_audio.md)
+- [Image, Vision & Art Generation](image_and_vision.md)
+- [Embeddings, Vector Search & Rerankers](embeddings_and_search.md)
+- [Azure AI Services & Ecosystem](azure_ai_services.md)
 - [Leaderboards & Benchmarks](benchmarks.md)
 - [Agent Task Routing Matrix](routing_guide.md)
 - [Live Pricing & Specs Matrix](pricing_and_specs.md)
 """
 
-    # 2. FRONTIER_MODELS.MD
+    # 2. SPEECH_AND_AUDIO.MD
+    speech_md = f"""# Speech, Audio & Text-to-Speech (TTS) Specifications ({now_iso})
+
+Comprehensive reference of Text-to-Speech (TTS), Speech-to-Text (STT), Realtime Audio Streaming APIs, character limits, rate limits, latency, audio formats, and pricing.
+
+---
+
+## 1. Azure AI Speech (Cognitive Services)
+
+Azure AI Speech provides industry-standard neural text-to-speech, speech-to-text, and real-time transcription.
+
+### Limits & Request Constraints
+- **Plain Text REST API Request Limit**: **10,000 characters** per request max. Exceeding this returns HTTP 400 Bad Request.
+- **SSML (Speech Synthesis Markup Language) Limit**: **64,000 characters** per request max (including tags).
+- **Synchronous Synthesis Duration Limit**: Maximum **10 minutes** of generated audio per single real-time request.
+- **Long-Form / Batch Synthesis API**: Used for texts exceeding 64,000 characters (e.g. audiobooks, full articles). Submits asynchronous jobs via `/cognitiveservices/v1/batch` (supports up to hundreds of thousands of characters or multiple files).
+- **Concurrency & Rate Limits (S0 Tier)**: 
+  - Standard neural voices: **20 concurrent transactions** default (expandable up to 200+ upon request).
+  - Rate limit: 200 requests/second.
+- **Speech-to-Text Limits**:
+  - Real-time Audio Stream: up to **60 minutes** per single continuous session.
+  - Batch Transcription: audio files up to **10 GB** or 20 hours per file.
+
+### Audio Output Formats & Sample Rates
+- `riff-24khz-16bit-mono-pcm` (High-fidelity uncompressed WAV)
+- `audio-24khz-160kbitrate-mono-mp3` (Recommended web standard)
+- `audio-48khz-192kbitrate-mono-mp3` (Ultra HD broadcast)
+- `ogg-24khz-16bit-mono-opus` (Lowest bandwidth / WebRTC streaming)
+
+### Pricing & Voices
+- **Neural Voice**: **$15.00 / 1 Million characters** (~$0.015 / 1,000 characters).
+- **Custom Neural Voice**: **$24.00 / 1 Million characters** (+ training & hosting fees).
+- **Speech-to-Text (Transcription)**: **$1.00 / audio hour** ($0.0167 / minute).
+
+---
+
+## 2. ElevenLabs
+
+ElevenLabs is known for expressive, human-like voice synthesis and voice cloning.
+
+### Models & Latency
+- `eleven_multilingual_v2`: Flagship expressive model, rich emotional range (~400ms latency).
+- `eleven_turbo_v2_5`: Fast synthesis, high quality (~200ms - 250ms latency).
+- `eleven_flash_v2_5` & `eleven_flash_v2`: Ultra-low latency (~75ms - 100ms), optimized for real-time conversational agents. Consumes 50% fewer credits.
+
+### Limits & Request Constraints
+- **Standard REST API (`/v1/text-to-speech/{{voice_id}}`)**:
+  - **Free Tier**: **2,500 characters** per single request max.
+  - **Starter / Creator / Pro / Scale Tiers**: **5,000 characters** per single request max.
+- **WebSocket Input Streaming (`/v1/text-to-speech/{{voice_id}}/stream-input`)**:
+  - Allows chunked streaming up to **10,000 characters** per stream session.
+- **Projects API (Long-Form Audio)**:
+  - Designed for articles and books up to 500,000+ characters with chapter-based chunking.
+- **Concurrency Rate Limits**:
+  - Free: 2 concurrent requests.
+  - Starter / Creator: 3 concurrent requests.
+  - Pro: 5 concurrent requests.
+  - Scale: 15 concurrent requests.
+
+### Pricing
+- Based on subscription credits (1 character = 1 credit on Multilingual/Turbo; 1 character = 0.5 credits on Flash).
+- Effective cost: **~$0.15 - $0.30 / 1,000 characters** depending on plan tier.
+
+---
+
+## 3. OpenAI Audio & TTS
+
+### Models & Limits
+- `tts-1`: Standard latency TTS optimized for real-time applications.
+- `tts-1-hd`: Higher fidelity TTS with reduced audio artifacts.
+- `whisper-1`: Automatic speech recognition (STT).
+- `gpt-4o-audio-preview` / Realtime API: Native voice-in / voice-out multimodal processing.
+
+### Request Limits
+- **TTS Max Input Length**: **4,096 characters** per request hard limit. Requests with >4,096 characters fail immediately with HTTP 400.
+- **Whisper Input File Limit**: Maximum **25 MB** file size (formats: mp3, mp4, mpeg, mpga, m4a, wav, webm). For files >25MB, audio must be split into chunks with PyDub / ffmpeg.
+- **Voices**: `alloy`, `echo`, `fable`, `onyx`, `nova`, `shimmer`.
+
+### Pricing
+- **`tts-1`**: **$15.00 / 1 Million characters** ($0.015 / 1,000 characters).
+- **`tts-1-hd`**: **$30.00 / 1 Million characters** ($0.030 / 1,000 characters).
+- **`whisper-1`**: **$0.006 / minute** ($0.36 / hour).
+- **Realtime Audio Tokens**:
+  - Audio Input: **$100.00 / 1M audio tokens** (~$0.06 / min).
+  - Audio Output: **$200.00 / 1M audio tokens** (~$0.24 / min).
+
+---
+
+## 4. Google Cloud Text-to-Speech & Gemini Audio
+
+### Limits & Constraints
+- **Cloud TTS REST / gRPC Input Limit**: **5,000 bytes / characters** per standard synthesis request (Text or SSML).
+- **Long Audio Synthesis API**: Asynchronous API for texts up to **1,000,000 bytes (1 MB)**. Output written directly to Google Cloud Storage (GCS).
+- **Gemini Native Audio (Gemini 2.0 / 2.5 / 3.7 Flash)**:
+  - Supports bidirectional audio streaming via WebSockets / Live API.
+  - Context window: 1,048,576 tokens.
+
+### Pricing
+- **Standard Voices**: $4.00 / 1 Million characters.
+- **Neural2 & Journey Voices**: $16.00 / 1 Million characters ($0.016 / 1k chars).
+- **Studio & Chirp (HD) Voices**: $160.00 / 1 Million characters ($0.160 / 1k chars).
+- **Gemini Audio Output**: Included in Gemini multimodal pricing ($2.50 - $3.00 / 1M tokens).
+
+---
+
+## 5. Ultra-Low Latency & Open-Weights Audio
+
+| Provider / Model | Synthesis Latency | Request Limit | Streaming Support | Pricing ($/1k chars) |
+|---|---|---|---|---|
+| **Cartesia Sonic** | ~90ms | 5,000 chars/chunk | WebSocket / SSE | $0.05 / 1k chars |
+| **Deepgram Aura** | ~100ms | 2,000 chars/chunk | WebSocket stream | $0.015 / 1k chars |
+| **PlayHT 2.0 Turbo** | ~150ms | 5,000 chars | WebSocket / REST | $0.05 / 1k chars |
+| **Kokoro 82M** (Open-Weights) | <50ms (local GPU) | 500 chars/chunk | Python library / ONNX | Free / Self-hosted |
+"""
+
+    # 3. IMAGE_AND_VISION.MD
+    image_md = f"""# Image & Vision AI Models: Specifications & Limits ({now_iso})
+
+Complete guide for generative image models, resolutions, aspect ratios, prompt constraints, and pricing.
+
+---
+
+## 1. Black Forest Labs: FLUX.1 Family
+
+FLUX.1 is the modern open/hosted standard for photorealism, detailed text rendering, and complex prompt adherence.
+
+### Models & Specs
+- **FLUX.1 [schnell]**: 4-step latent adversarial diffusion distilled model. Ultra-fast (~1-2 seconds).
+  - Cost: **~$0.003 / image**.
+- **FLUX.1 [dev]**: 20-50 steps guidance-distilled model for non-commercial/commercial fine-tunes & LoRAs.
+  - Cost: **~$0.025 - $0.030 / image**.
+- **FLUX.1 [pro] & FLUX 1.1 Pro**: Closed API flagship. Maximum anatomical precision and raw photo quality.
+  - Cost: **~$0.040 - $0.050 / image** ($0.070 for Ultra 2K / 4MP resolution).
+- **Supported Resolutions & Aspect Ratios**:
+  - `1:1` (1024x1024), `16:9` (1344x768), `9:16` (768x1344), `4:3` (1152x864), `3:4` (864x1152), `21:9` (1536x640).
+  - Resolution Range: 256x256 up to 2048x2048 (FLUX 1.1 Pro Ultra).
+
+---
+
+## 2. Ideogram v2 & v2 Turbo
+
+Ideogram is the recognized leader for embedding clear, accurate typography, graphic design, and brand logos into images.
+
+### Specs & Features
+- **Style Presets**: `General`, `Realistic`, `Design`, `3D`, `Anime`.
+- **Text Rendering**: Flawless paragraph and headline generation with typography control.
+- **Aspect Ratios**: `1:1`, `16:9`, `9:16`, `4:3`, `3:4`, `3:2`, `2:3`, `16:10`, `10:16`.
+- **Pricing**:
+  - Ideogram v2: **$0.08 / image** (4 image batch: $0.32).
+  - Ideogram v2 Turbo: **$0.05 / image**.
+
+---
+
+## 3. OpenAI DALL-E 3 & GPT-4o Vision
+
+### DALL-E 3 Constraints & Limits
+- **Resolutions Allowed**:
+  - Square: `1024x1024`
+  - Wide / Landscape: `1792x1024` (or `1024x1792` portrait)
+  - No custom arbitrary resolutions supported.
+- **Prompt Length**: Max **4,000 characters**. OpenAI automatically expands prompts using a LLM rewrite step unless specified via system instructions.
+- **Pricing**:
+  - Standard Quality: `1024x1024` = **$0.040 / img**; `1792x1024` / `1024x1792` = **$0.080 / img**.
+  - HD Quality: `1024x1024` = **$0.080 / img**; `1792x1024` / `1024x1792` = **$0.120 / img**.
+
+---
+
+## 4. Midjourney v6.1 & v7
+
+### Key Parameters & Limits
+- Aspect Ratios: `--ar <w>:<h>` (e.g. `--ar 16:9`, `--ar 21:9`, `--ar 4:5`).
+- Stylize: `--s <0-1000>` (default 100).
+- Chaos / Variation: `--c <0-100>`.
+- Weirdness: `--w <0-3000>`.
+- Raw Mode: `--style raw` (reduces default Midjourney aesthetic bias).
+- Maximum upscale: 2048x2048 (4 Megapixels).
+
+---
+
+## 5. Recraft v3 & Google Imagen 3
+
+- **Recraft v3**: Unique ability to generate **Clean Vector SVGs** (`image/svg+xml`), customizable brand color palettes, icon sets, and 3D illustrations. Cost: **$0.04 / image**.
+- **Google Imagen 3 / Imagen 3 Fast**: High prompt fidelity, photorealism, up to 1024x1024, integrated into Google Vertex AI & Gemini APIs. Cost: **$0.03 - $0.04 / image**.
+"""
+
+    # 4. EMBEDDINGS_AND_SEARCH.MD
+    embeddings_md = f"""# Embeddings, Vector Search & Rerankers ({now_iso})
+
+Specifications, dimensionalities, context limits, and pricing for vector retrieval and RAG architectures.
+
+---
+
+## 1. OpenAI Embeddings
+
+| Model | Dimensions | Max Input Tokens | Price per 1M Tokens | Recommended Use |
+|---|---|---|---|---|
+| `text-embedding-3-small` | 1,536 (or reduced to 512) | 8,191 tokens | **$0.02** | High-efficiency general semantic search |
+| `text-embedding-3-large` | 3,072 (or reduced to 1536/256) | 8,191 tokens | **$0.13** | Top-tier multi-domain RAG retrieval |
+| `text-embedding-ada-002` | 1,536 (fixed) | 8,191 tokens | **$0.10** | Legacy standard |
+
+*Note on Matryoshka Embeddings*: `text-embedding-3-*` supports shortening dimensions via the `dimensions` API parameter without losing core semantic representation.
+
+---
+
+## 2. Cohere Embeddings & Rerankers
+
+### Cohere Embed v3
+- **Models**: `embed-english-v3.0`, `embed-multilingual-v3.0`, `embed-english-light-v3.0`.
+- **Dimensions**: 1,024 dimensions (English/Multilingual) or 384 dimensions (Light).
+- **Max Input**: 512 tokens per chunk.
+- **Input Types**: Must specify `input_type="search_query"` for queries and `input_type="search_document"` for stored documents.
+- **Compression**: Native support for `float`, `int8`, `uint8`, `binary`, and `ubinary` (reducing vector memory up to 96%).
+
+### Cohere Rerank v3.5
+- **Model**: `rerank-v3.5` / `rerank-multilingual-v3.0`.
+- **Context Limit**: **4,096 tokens** per document chunk.
+- **Functionality**: Cross-encoder scoring of top 50-100 retrieved candidate chunks. Far outperforms bi-encoder cosine similarity.
+- **Pricing**: **$2.00 / 1,000 search queries** (up to 100 docs per query).
+
+---
+
+## 3. Voyage AI Embeddings
+
+Voyage AI models are optimized by experts for codebases and complex enterprise domains.
+
+| Model | Dimensions | Context Window | Price / 1M Tokens | Optimization |
+|---|---|---|---|---|
+| `voyage-3` | 1,024 | **32,000 tokens** | **$0.12** | Long-context general RAG |
+| `voyage-code-3` | 1,536 | **32,000 tokens** | **$0.18** | Code search, syntax, AST retrieval |
+| `voyage-finance-2` | 1,024 | 32,000 tokens | $0.12 | Financial reports, tables, filings |
+| `voyage-multilingual-2`| 1,024 | 16,000 tokens | $0.12 | Cross-lingual retrieval |
+
+---
+
+## 4. Open-Weights & Local Embeddings / Rerankers
+
+- **BAAI/bge-m3**: 8,192 context length, 1,024 dimensions. Supports dense, lexical (BM25-style sparse), and ColBERT multi-vector scoring in a single forward pass.
+- **BAAI/bge-reranker-large**: State-of-the-art open cross-encoder reranker for local Ollama / HuggingFace pipelines.
+- **Jina AI Embeddings v3**: 8,192 context, 1,024 dimensions with task adapters (`retrieval.query`, `retrieval.passage`, `text-matching`, `classification`).
+"""
+
+    # 5. AZURE_AI_SERVICES.MD
+    azure_md = f"""# Azure AI Cloud Services & Infrastructure Guide ({now_iso})
+
+Specifications, quotas, rate limits, and configuration details for the Microsoft Azure AI ecosystem.
+
+---
+
+## 1. Azure OpenAI Service
+
+### Quotas & Rate Limits
+- **Tokens-Per-Minute (TPM)** & **Requests-Per-Minute (RPM)**:
+  - Default Regional Quotas: E.g. GPT-4o Standard S0 has default ~450k TPM and 2,700 RPM per region.
+  - Global Standard Deployment: Routes traffic across global Azure data centers to provide up to 2M - 10M TPM with high availability.
+  - Provisioned Throughput Units (PTU): Dedicated compute reservation providing guaranteed latency and throughput (measured in 100 PTU increments).
+- **Batch API**: Allows asynchronous processing of large jobs at 50% discount with 24-hour turnaround and dedicated separate quota.
+- **Content Filtering & Safety**: Configurable severity thresholds (Low, Medium, High) for Hate, Self-harm, Sexual, and Violence categories. Custom blocklists and prompt shields (jailbreak detection).
+
+---
+
+## 2. Azure AI Search (Cognitive Search)
+
+Azure AI Search is an enterprise search engine supporting hybrid BM25 lexical search, dense vector retrieval, and semantic reranking.
+
+### Tier Limits & Capacities
+| Tier | Max Indexes | Max Storage per SU | Vector Search Dimensions | Semantic Ranker Included |
+|---|---|---|---|---|
+| **Free** | 3 | 50 MB | Up to 3,072 | No |
+| **Basic** | 15 | 2 GB | Up to 3,072 | Add-on ($) |
+| **Standard S1** | 50 | 25 GB | Up to 4,096 | Yes (First 1k queries free/mo) |
+| **Standard S2** | 200 | 100 GB | Up to 4,096 | Yes |
+| **Standard S3** | 1,000 | 200 GB | Up to 4,096 | Yes |
+
+### Key Search Features
+- **Hybrid Retrieval**: Combines BM25 lexical search with HNSW / Exhaustive KNN vector search using Reciprocal Rank Fusion (RRF).
+- **Semantic Reranking**: Microsoft's Turing cross-encoder neural model applied over top 50 results to boost precision.
+
+---
+
+## 3. Azure AI Speech & Language
+
+- **Text-to-Speech (TTS)**: 10,000 characters plain text limit; 64,000 characters SSML limit; 10 min synchronous synthesis limit; batch synthesis for unlimited audio.
+- **Speech-to-Text (STT)**: Real-time WebSocket streaming up to 60 min; batch transcription up to 10GB / 20 hours per file.
+- **Language / Text Analytics**: Sentiment analysis, Key phrase extraction, Named Entity Recognition (NER), PII redaction. Max 5,120 characters per document, up to 25 documents per batch request.
+
+---
+
+## 4. Azure AI Document Intelligence (Form Recognizer)
+
+- **Prebuilt Models**: Invoices, receipts, identity documents (passports, driver licenses), tax forms (W-2), business cards.
+- **Limits**:
+  - Synchronous REST API: files up to **4 MB** (or 2 pages for PDF).
+  - Asynchronous Batch Analyze: files up to **500 MB** and **2,000 pages** per PDF file.
+"""
+
+    # 6. FRONTIER_MODELS.MD
     frontier_md = f"""# Frontier AI Models: Profiles & Capabilities ({now_iso})
 
 Detailed analysis of the latest closed and hosted API frontier models.
@@ -169,7 +479,7 @@ Detailed analysis of the latest closed and hosted API frontier models.
 - **Role**: Open reasoning model with pure RL training, competitive with closed reasoning flagships.
 """
 
-    # 3. OPEN_WEIGHTS.MD
+    # 7. OPEN_WEIGHTS.MD
     open_weights_md = f"""# Open-Weights & Local AI Models Guide ({now_iso})
 
 Specs for running models locally (Ollama, vLLM, SGLang, llama.cpp) or via open inference providers.
@@ -205,7 +515,7 @@ vllm serve Qwen/Qwen2.5-Coder-32B-Instruct --max-model-len 32768
 ```
 """
 
-    # 4. BENCHMARKS.MD
+    # 8. BENCHMARKS.MD
     benchmarks_md = f"""# AI Model Benchmarks & Leaderboards Matrix ({now_iso})
 
 Comparative leaderboards across software engineering, coding benchmarks, and reasoning.
@@ -251,14 +561,14 @@ Comparative leaderboards across software engineering, coding benchmarks, and rea
 | **Gemini 3.1 Pro** | **96.8%** | **78.4%** | **82.5%** |
 """
 
-    # 5. ROUTING_GUIDE.MD
-    routing_md = f"""# Agent Task Model Routing Matrix ({now_iso})
+    # 9. ROUTING_GUIDE.MD
+    routing_md = f"""# Agent Task & Modality Model Routing Matrix ({now_iso})
 
-Actionable decision matrix for agents and developers to choose the best model for any task.
+Actionable decision matrix for agents and developers to choose the best model for any task across all modalities.
 
 ---
 
-## Decision Matrix
+## 1. LLM & Reasoning Routing Matrix
 
 ```
 ┌───────────────────────────────────────┬────────────────────────────────────────────────────────┐
@@ -285,9 +595,35 @@ Actionable decision matrix for agents and developers to choose the best model fo
 │                                       │ DeepSeek-R1-Distill-Qwen-32B / Gemma 4 31B             │
 └───────────────────────────────────────┴────────────────────────────────────────────────────────┘
 ```
+
+---
+
+## 2. Speech, Image & Vector Modality Routing Matrix
+
+```
+┌───────────────────────────────────────┬────────────────────────────────────────────────────────┐
+│ MODALITY & USE CASE                   │ RECOMMENDED PROVIDER & MODEL                           │
+├───────────────────────────────────────┼────────────────────────────────────────────────────────┤
+│ A. Long-Form Text-to-Speech           │ Azure AI Speech (Neural Voices, SSML 64k chars) /      │
+│    (Articles, Narrations, Budget TTS) │ ElevenLabs Projects API / OpenAI tts-1 (4,096 chars)   │
+├───────────────────────────────────────┼────────────────────────────────────────────────────────┤
+│ B. Realtime Conversational Voice      │ Cartesia Sonic (~90ms) / Deepgram Aura (~100ms) /      │
+│    (Sub-second Voice Agent Loops)     │ ElevenLabs Flash v2.5 (~75ms) / Gemini 2.0/3.7 Live    │
+├───────────────────────────────────────┼────────────────────────────────────────────────────────┤
+│ C. Image Generation with Typography   │ Ideogram v2 / Ideogram v2 Turbo (flawless text)        │
+│    (Posters, Logos, UI Cards)         │ Recraft v3 (Vector SVG, brand styles)                  │
+├───────────────────────────────────────┼────────────────────────────────────────────────────────┤
+│ D. Photorealistic Image Generation    │ FLUX.1 [dev/pro] / FLUX 1.1 Pro Ultra / Midjourney v6.1│
+├───────────────────────────────────────┼────────────────────────────────────────────────────────┤
+│ E. Codebase Semantic Search (Vectors) │ Voyage AI voyage-code-3 (32k context) / BGE-M3         │
+├───────────────────────────────────────┼────────────────────────────────────────────────────────┤
+│ F. Hybrid RAG Search & Reranking      │ Azure AI Search (Hybrid BM25 + Vector + Semantic) /    │
+│                                       │ Cohere Rerank v3.5 + OpenAI text-embedding-3-small     │
+└───────────────────────────────────────┴────────────────────────────────────────────────────────┘
+```
 """
 
-    # 6. PRICING_AND_SPECS.MD (With real-time fetched rows)
+    # 10. PRICING_AND_SPECS.MD (With real-time fetched rows)
     pricing_md = f"""# Live AI Models Pricing & Specifications ({now_iso})
 
 Real-time model identifiers, context limits, and token pricing ($ per 1 Million tokens) directly from the live model registry.
@@ -337,6 +673,10 @@ Real-time model identifiers, context limits, and token pricing ($ per 1 Million 
         "overview.md": overview_md,
         "frontier_models.md": frontier_md,
         "open_weights.md": open_weights_md,
+        "speech_and_audio.md": speech_md,
+        "image_and_vision.md": image_md,
+        "embeddings_and_search.md": embeddings_md,
+        "azure_ai_services.md": azure_md,
         "benchmarks.md": benchmarks_md,
         "routing_guide.md": routing_md,
         "pricing_and_specs.md": pricing_md,
@@ -344,7 +684,7 @@ Real-time model identifiers, context limits, and token pricing ($ per 1 Million 
 
 
 def sync_live_models_to_store(store: Any = None) -> Dict[str, Any]:
-    """Fetch live data and write all updated model docs into store."""
+    """Fetch live data and write all updated model docs into store and local development tree."""
     from .store import DocsStore
     st = store or DocsStore()
     

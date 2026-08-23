@@ -173,11 +173,17 @@ CURATED_CATALOG: Dict[str, Dict[str, Any]] = {
     },
     "ai-models": {
         "name": "ai-models",
-        "description": "Comprehensive reference of Frontier & Open-Weights AI Models (Claude 3.7/3.5, GPT-4.5/o1/o3, Gemini 2.0/3.0/3.7, DeepSeek V3/R1, Qwen 2.5 Coder, Llama 3.3), specs, benchmarks, pricing, and task routing",
+        "description": "Comprehensive reference of Frontier LLMs, Image/Vision (FLUX, Midjourney, Ideogram), Speech/Audio/TTS (Azure Speech, ElevenLabs, OpenAI Audio, Gemini Live, Cartesia), Embeddings (OpenAI, Voyage, Cohere), Benchmarks, and Azure AI Services",
         "source_type": "bundled",
         "url": "bundled://ai-models",
-        "tags": ["ai", "models", "benchmarks", "llm", "routing", "pricing", "frontier"],
-        "detect": ["ai-models", "models", "llms", "ki-modelle", "frontier-models", "llm-models", "anthropic", "openai", "deepseek", "gemini", "qwen", "claude"],
+        "tags": ["ai", "models", "benchmarks", "llm", "routing", "pricing", "frontier", "speech", "tts", "stt", "audio", "vision", "image", "embeddings", "azure-ai"],
+        "detect": [
+            "ai-models", "models", "llms", "ki-modelle", "frontier-models", "llm-models",
+            "anthropic", "openai", "deepseek", "gemini", "qwen", "claude",
+            "elevenlabs", "azure-speech", "azure-tts", "speech", "tts", "stt", "audio", "voice",
+            "cartesia", "deepgram", "whisper", "flux", "midjourney", "ideogram", "imagen", "dalle",
+            "recraft", "embeddings", "reranker", "azure-ai", "azure openai", "azure cognitive",
+        ],
     },
 }
 
