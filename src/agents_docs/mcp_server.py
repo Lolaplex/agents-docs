@@ -208,3 +208,17 @@ def sync_memory_docs() -> str:
         "source": "~/.agents/memory/",
         "synced_docsets": synced_results,
     }, indent=2)
+
+
+@mcp.tool()
+def get_model_playbook(model: str = "auto") -> str:
+    """
+    Get self-awareness operational playbooks, strengths, traps, and best practices for AI models.
+    Enables models to understand their own capabilities and optimize tool execution patterns.
+    
+    Args:
+        model: Model name or family (e.g. 'gemini-3.7-flash', 'claude-3.7-sonnet', 'gpt-4o', 'deepseek-r1', 'qwen', or 'auto').
+    """
+    from .playbooks import resolve_model_playbook
+    return resolve_model_playbook(model_query=model)
+

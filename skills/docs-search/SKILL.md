@@ -22,8 +22,12 @@ Use this skill when you need accurate, version-specific framework syntax, API si
    - **Image & Vision Generators**: `search_docs(docset="ai-models", query="flux 1.1 pro ideogram v2 midjourney resolutions aspect ratios")`
    - **Embeddings & Vector Rerankers**: `search_docs(docset="ai-models", query="text-embedding-3 voyage-code-3 cohere rerank v3.5 dimensions")`
    - **Azure AI & Cloud Services**: `search_docs(docset="ai-models", query="azure openai tpm quotas azure search hybrid vector limits")`
-4. If querying multiple distinct providers/libraries:
+4. For Model Metacognition & Self-Knowledge:
+   - Tool: `get_model_playbook(model="auto")` or `get_model_playbook(model="gemini-3.7-flash")`
+   - Retrieve operational strengths, failure modes, whitespace gotchas, and tool-calling strategies tailored to your exact model.
+5. If querying multiple distinct providers/libraries:
    - Run compound searches or query each provider specifically (e.g. `query="azure speech limits"`, `query="elevenlabs request limits"`).
    - If a catalog docset is not installed, sync it in 1 second from the curated catalog:
      - Tool: `sync_docset(name="ai-models")` or `sync_docset(name="svelte-5")`
-5. Read the exact section snippets returned by `search_docs` and apply the verified limits and specifications.
+6. Read the exact section snippets returned by `search_docs` and apply the verified limits and specifications.
+

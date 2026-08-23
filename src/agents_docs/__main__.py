@@ -63,6 +63,10 @@ def build_parser() -> argparse.ArgumentParser:
     search_p.add_argument("--docset", default="all", help="Target docset (default: all)")
     search_p.add_argument("--top", type=int, default=3, help="Number of results (default: 3)")
 
+    # Playbook sub-command
+    playbook_p = subparsers.add_parser("playbook", help="View model metacognition & operational playbook")
+    playbook_p.add_argument("model", nargs="?", default="auto", help="Model name or family (default: auto)")
+
     # Catalog sub-command
     subparsers.add_parser("catalog", help="List curated pre-configured framework docsets")
 
@@ -187,6 +191,12 @@ def main(argv: list[str] | None = None) -> int:
             print(f"[{r['docset']}] {r['file']}#L{r['line']} -- {r['header']} (Score: {r['score']})")
             print(f"========================================================")
             print(r["snippet"])
+        return 0
+
+    elif args.command == "playbook":
+        from .playbooks import resolve_model_playbook
+        output = resolve_model_playbook(model_query=args.model)
+        print(output)
         return 0
 
     elif args.command == "ingest":

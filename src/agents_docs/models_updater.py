@@ -667,11 +667,19 @@ Real-time model identifiers, context limits, and token pricing ($ per 1 Million 
 | Model Identifier | Display Name | Context Window | Input ($/1M) | Output ($/1M) |
 |---|---|---|---|---|
 {render_rows(qwen + mistral)}
-"""
+    from .playbooks import format_all_playbooks_summary, format_playbook_markdown, PLAYBOOKS
+
+    playbooks_combined = [
+        "# AI Models: Metacognition, Operational Playbooks & Self-Correction Guide\n\nComprehensive self-awareness guide for AI coding assistants. Details strengths, blindspots, and failure modes across model families.\n"
+    ]
+    for p in PLAYBOOKS.values():
+        playbooks_combined.append(format_playbook_markdown(p))
+    playbooks_md = "\n\n---\n\n".join(playbooks_combined)
 
     return {
         "overview.md": overview_md,
         "frontier_models.md": frontier_md,
+        "model_playbooks.md": playbooks_md,
         "open_weights.md": open_weights_md,
         "speech_and_audio.md": speech_md,
         "image_and_vision.md": image_md,
