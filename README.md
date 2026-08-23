@@ -13,6 +13,33 @@ Instant BM25 search over official framework documentation and live AI model regi
 
 ---
 
+## Quickstart
+
+### 1. 1-Step Setup (PyPI)
+
+```bash
+pip install agents-docs && agents-docs init
+```
+
+Scaffolds `~/.agents/docs/`, seeds the live `ai-models` registry, autowires MCP configurations into your installed IDEs, and registers assistant skills.
+
+### 2. Agent-Driven Setup (Zero Friction)
+
+> [!TIP]
+> **🤖 Agent-Driven Setup (Zero Friction):**  
+> Simply tell your coding agent: **"Install and set up agents-docs for me."**  
+> The agent installs the package, runs `agents-docs init`, and automatically retrieves fresh documentation whenever you ask technical stack or model pricing questions.
+
+### 3. Source Checkout via vand
+
+If you manage multi-repo checkouts with [vand](https://github.com/Lolaplex/vand), `agents-docs` includes declarative lifecycle hooks in `source.yml`:
+
+```bash
+vand clone Lolaplex/agents-docs
+```
+
+---
+
 ## Why `.agents/docs`?
 
 Coding agents frequently hallucinate deprecated APIs (Svelte 4 vs 5 Runes, Tailwind v3 vs v4, React 19 Actions) or reference outdated LLM models and token pricing.
@@ -57,23 +84,6 @@ Traditional vector-embedding RAG solutions are bloated: they require Docker cont
  │  Sub-10ms Exact Retrieval   │ │  sync_project_docs          │
  └─────────────────────────────┘ └─────────────────────────────┘
 ```
-
----
-
-## Quickstart
-
-### 1-Step Setup
-
-```bash
-pip install agents-docs && agents-docs init
-```
-
-Scaffolds `~/.agents/docs/`, seeds the live `ai-models` registry, autowires MCP configurations into your installed IDEs, and registers assistant skills.
-
-> [!TIP]
-> **🤖 Agent-Driven Setup (Zero Friction):**  
-> Simply tell your coding agent: **"Install and set up agents-docs for me."**  
-> The agent installs the package, runs `agents-docs init`, and automatically retrieves fresh documentation whenever you ask technical stack or model pricing questions.
 
 ---
 
