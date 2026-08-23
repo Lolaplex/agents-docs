@@ -15,7 +15,7 @@ Instant BM25 search over official framework documentation and live AI model regi
 
 ## Quickstart
 
-### 1. 1-Step Setup (PyPI)
+### 1-Step Setup
 
 ```bash
 pip install agents-docs && agents-docs init
@@ -23,20 +23,12 @@ pip install agents-docs && agents-docs init
 
 Scaffolds `~/.agents/docs/`, seeds the live `ai-models` registry, autowires MCP configurations into your installed IDEs, and registers assistant skills.
 
-### 2. Agent-Driven Setup (Zero Friction)
-
 > [!TIP]
 > **🤖 Agent-Driven Setup (Zero Friction):**  
 > Simply tell your coding agent: **"Install and set up agents-docs for me."**  
 > The agent installs the package, runs `agents-docs init`, and automatically retrieves fresh documentation whenever you ask technical stack or model pricing questions.
 
-### 3. Source Checkout via vand
-
-If you manage multi-repo checkouts with [vand](https://github.com/Lolaplex/vand), `agents-docs` includes declarative lifecycle hooks in `source.yml`:
-
-```bash
-vand clone Lolaplex/agents-docs
-```
+*Source checkouts can also be installed and managed using [vand](https://github.com/Lolaplex/vand).*
 
 ---
 
