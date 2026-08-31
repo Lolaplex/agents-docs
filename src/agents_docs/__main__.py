@@ -26,13 +26,13 @@ from .engine import DocsEngine
 from .fetcher import DocsFetcher
 from .mcp_server import mcp
 from .store import DocsStore
-from .sync import merge_agent_mcp, sync_bundled_docsets, sync_skills
+from .sync import merge_agent_mcp, sync_skills
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="agents-docs",
-        description="Ultra-fast, zero-bloat local markdown documentation RAG for AI coding agents.",
+        description="Local markdown docsets with header-aware BM25 search.",
     )
     parser.add_argument(
         "-v",
@@ -113,16 +113,15 @@ def main(argv: list[str] | None = None) -> int:
     fetcher = DocsFetcher(store=store)
 
     if args.command == "init":
-        print("=== Initializing agents-docs (Plug & Play) ===\n")
+        print("=== Initializing agents-docs ===\n")
         synced = sync_skills()
         print(f"1. Synced {len(synced)} agent skills:")
         for s in synced:
             print(f"   * {s}")
 
-        docsets = sync_bundled_docsets(store=store)
-        print(f"\n2. Synced {len(docsets)} built-in docsets:")
-        for d in docsets:
-            print(f"   * {d}")
+        print("\n2. No bundled docsets seeded. Sync a catalog name or URL when you want one:")
+        print("   agents-docs sync svelte-5")
+        print("   agents-docs catalog")
 
         pruned = store.prune_all_docsets()
         print(f"\n3. Pruned {pruned['files_pruned']} docs files ({round(pruned['bytes_saved']/1024, 1)} KB boilerplate cleaned).")

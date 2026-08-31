@@ -177,13 +177,7 @@ CURATED_CATALOG: Dict[str, Dict[str, Any]] = {
         "source_type": "bundled",
         "url": "bundled://ai-models",
         "tags": ["ai", "models", "benchmarks", "llm", "routing", "pricing", "frontier", "speech", "tts", "stt", "audio", "vision", "image", "embeddings", "azure-ai"],
-        "detect": [
-            "ai-models", "models", "llms", "ki-modelle", "frontier-models", "llm-models",
-            "anthropic", "openai", "deepseek", "gemini", "qwen", "claude",
-            "elevenlabs", "azure-speech", "azure-tts", "speech", "tts", "stt", "audio", "voice",
-            "cartesia", "deepgram", "whisper", "flux", "midjourney", "ideogram", "imagen", "dalle",
-            "recraft", "embeddings", "reranker", "azure-ai", "azure openai", "azure cognitive",
-        ],
+        "detect": ["ai-models"],
     },
 }
 

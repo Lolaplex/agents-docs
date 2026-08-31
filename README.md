@@ -8,8 +8,8 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat-square" alt="License"></a>
 </p>
 
-**Ultra-fast, zero-bloat local markdown documentation RAG for AI coding agents via MCP.**  
-Instant BM25 search over official framework documentation and live AI model registries. Shared across **Cursor**, **Claude Code**, **Antigravity**, and **Zed**.
+**Local markdown docsets with header-aware BM25 search.**  
+Fetch a catalog name or URL into `~/.agents/docs/`. Shared across **Cursor**, **Claude Code**, **Antigravity**, and **Zed**.
 
 ---
 
@@ -21,7 +21,7 @@ Instant BM25 search over official framework documentation and live AI model regi
 pip install agents-docs && agents-docs init
 ```
 
-Scaffolds `~/.agents/docs/`, seeds the live `ai-models` registry, autowires MCP configurations into your installed IDEs, and registers assistant skills.
+Scaffolds `~/.agents/docs/`, autowires MCP configurations into your installed IDEs, and registers assistant skills. Docsets are fetched on `agents-docs sync <name>`, not seeded at init.
 
 > [!TIP]
 > **🤖 Agent-Driven Setup (Zero Friction):**  

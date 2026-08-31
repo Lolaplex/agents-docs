@@ -262,11 +262,6 @@ def main(argv: list[str] | None = None) -> int:
     for s in skills_synced:
         print(f" * {s}")
 
-    docsets_synced = sync_bundled_docsets()
-    print(f"\nSynced {len(docsets_synced)} bundled docsets:")
-    for d in docsets_synced:
-        print(f" * {d}")
-
     mcp_results = merge_agent_mcp()
     print(f"\nConfigured MCP servers across {len(mcp_results)} host configs:")
     for r in mcp_results:
