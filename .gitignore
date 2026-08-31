@@ -34,9 +34,13 @@ htmlcov/
 
 # Local Agent Runtimes & Injects
 .agents/
+.cursor/
 
 # IDE & OS
 .DS_Store
 Thumbs.db
 .idea/
 .vscode/
+uv.lock
+.env
+*.log
