@@ -6,7 +6,16 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from agents_docs.mcp_server import list_catalog, list_docsets, search_docs, sync_project_docs
+from agents_docs.mcp_server import (
+    delete_doc,
+    get_doc,
+    get_model_playbook,
+    list_catalog,
+    list_docs,
+    search_docs,
+    sync_external_doc,
+    write_doc,
+)
 
 
 class TestMCPServer(unittest.TestCase):
@@ -16,24 +25,39 @@ class TestMCPServer(unittest.TestCase):
         self.assertIn("catalog", data)
         self.assertGreaterEqual(data["count"], 5)
 
-    def test_list_docsets_tool(self):
-        res = list_docsets()
+    def test_list_docs_tool(self):
+        res = list_docs()
         data = json.loads(res)
-        self.assertTrue("docsets" in data or "message" in data)
+        self.assertTrue("docs" in data or "message" in data)
 
     def test_search_docs_tool_empty(self):
-        res = search_docs(docset="non-existent-lib", query="random test query")
+        res = search_docs(category="non-existent-lib", query="random test query")
         self.assertIn("No matching sections found", res)
 
-    def test_sync_project_docs(self):
-        tmp = Path(tempfile.mkdtemp())
-        (tmp / "package.json").write_text(json.dumps({"dependencies": {"svelte": "^5.0.0", "fastapi": "^0.100.0"}}), encoding="utf-8")
-        
-        with patch("agents_docs.mcp_server._ensure_docset_fresh") as mock_fresh:
-            res = sync_project_docs(str(tmp))
-            data = json.loads(res)
-            self.assertEqual(data["status"], "success")
-            self.assertIn("svelte-5", data["synced_docsets"])
+    def test_write_get_delete_doc_flow(self):
+        # 1. Write doc
+        res_write = write_doc(
+            name="test-cdp-spec",
+            content="# Chrome DevTools Protocol\n\n## Page Domain\n\nPage.enable starts page events.",
+            category="apis",
+        )
+        self.assertIn("Saved technical doc 'test-cdp-spec'", res_write)
+
+        # 2. Get doc
+        content = get_doc(name="test-cdp-spec", category="apis")
+        self.assertIn("Chrome DevTools Protocol", content)
+
+        # 3. Search doc
+        res_search = search_docs(query="Page.enable page events", category="apis")
+        self.assertIn("Chrome DevTools Protocol", res_search)
+
+        # 4. Delete doc
+        res_del = delete_doc(name="test-cdp-spec", category="apis")
+        self.assertIn("Deleted document 'test-cdp-spec'", res_del)
+
+    def test_model_playbook_tool(self):
+        res = get_model_playbook(model="gemini-3.7-flash")
+        self.assertIn("gemini", res.lower())
 
 
 if __name__ == "__main__":

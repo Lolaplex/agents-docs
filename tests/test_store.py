@@ -42,6 +42,30 @@ class TestDocsStore(unittest.TestCase):
         self.assertTrue(self.store.delete_docset("temp-lib"))
         self.assertFalse(self.store.get_docset_dir("temp-lib").exists())
 
+    def test_category_save_get_list_delete(self):
+        # 1. Save doc in category stacks
+        saved = self.store.save_doc("tailwind-v3", "# Tailwind v3 rules", category="stacks")
+        self.assertTrue(saved.exists())
+        self.assertEqual(saved.name, "tailwind-v3.md")
+
+        # 2. Get doc
+        doc = self.store.get_doc("tailwind-v3", category="stacks")
+        self.assertEqual(doc, "# Tailwind v3 rules")
+
+        # 3. Get doc across all categories
+        doc_all = self.store.get_doc("tailwind-v3")
+        self.assertEqual(doc_all, "# Tailwind v3 rules")
+
+        # 4. List docs
+        docs = self.store.list_docs(category="stacks")
+        self.assertEqual(len(docs), 1)
+        self.assertEqual(docs[0]["name"], "tailwind-v3")
+        self.assertEqual(docs[0]["category"], "stacks")
+
+        # 5. Delete doc
+        self.assertTrue(self.store.delete_doc("tailwind-v3", category="stacks"))
+        self.assertIsNone(self.store.get_doc("tailwind-v3"))
+
 
 if __name__ == "__main__":
     unittest.main()

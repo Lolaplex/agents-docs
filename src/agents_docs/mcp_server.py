@@ -1,7 +1,7 @@
 """
 FastMCP Server for agents-docs.
-Exposes documentation listing, searching, catalog browsing, and syncing.
-Features Auto-Sync on search, Auto-Refresh, Project Dependency Syncing, and Memory Integration.
+Technical Reference & Hard-Fact Register for AI coding agents.
+Categories: stacks, models, apis, platforms, custom.
 """
 
 from __future__ import annotations
@@ -54,45 +54,30 @@ def _ensure_docset_fresh(name: str) -> None:
 
 
 @mcp.tool()
-def list_docsets() -> str:
+def search_docs(query: str, category: str = "all", top_k: int = 4) -> str:
     """
-    List all indexed framework/library docsets in ~/.agents/docs/ with file stats and metadata.
-    """
-    docsets = store.list_docsets()
-    if not docsets:
-        return json.dumps({
-            "message": "No docsets installed yet. Use sync_docset(name='...') or list_catalog() to install official docs.",
-            "docsets": [],
-            "docs_root": str(store.root),
-        }, indent=2)
-    return json.dumps({"docsets": docsets, "docs_root": str(store.root)}, indent=2)
-
-
-@mcp.tool()
-def search_docs(query: str, docset: str = "all", top_k: int = 4) -> str:
-    """
-    Search local documentation sets using header-aware BM25 lexical ranking.
-    Auto-fetches missing catalog docsets on demand in 1 second.
+    Search hard technical facts, API specs, stack rules, model capabilities, and playbooks using header-aware BM25 ranking.
     
     Args:
-        query: Keywords, function signatures, or questions (e.g. '$state runes', 'HTTPException', 'glassmorphism')
-        docset: Target docset name (e.g. 'svelte-5', 'fastapi', 'tailwind-v3') or 'all' to search all installed docs.
+        query: Keywords, function signatures, syntax, or technical questions (e.g. 'runes $state', 'HTTPException', 'coolify postgres port', 'cdp tab focus')
+        category: Target category ('stacks', 'models', 'apis', 'platforms', 'custom', or specific docset name, or 'all' to search everything).
         top_k: Number of relevant sections to return (default 4).
     """
-    clean_docset = docset.strip().lower()
-    if clean_docset != "all" and clean_docset != "*":
-        _ensure_docset_fresh(clean_docset)
+    clean_cat = category.strip().lower()
+    if clean_cat != "all" and clean_cat != "*":
+        _ensure_docset_fresh(clean_cat)
 
-    search_data = engine.search_detailed(docset=clean_docset, query=query, top_k=top_k)
+    search_data = engine.search_detailed(docset=clean_cat, query=query, top_k=top_k)
     results = search_data["results"]
     missing_terms = search_data.get("missing_terms", [])
 
     if not results:
-        installed = [d["name"] for d in store.list_docsets()]
-        msg = f"No matching sections found in docset '{docset}' for query: '{query}'."
+        installed = [d["name"] for d in store.list_docs()]
+        msg = f"No matching sections found in '{category}' for query: '{query}'."
         if installed:
-            msg += f"\nInstalled docsets: {', '.join(installed)}."
-        msg += "\nTip: Run `list_catalog()` to check available framework docsets, or `sync_docset(name='...')` to install missing official docs."
+            sample = installed[:10]
+            msg += f"\nSample installed docs: {', '.join(sample)}..."
+        msg += "\nTip: Run `list_docs()` to check available technical docs, or `write_doc()` to file a new hard fact."
         return msg
 
     formatted = []
@@ -106,47 +91,102 @@ def search_docs(query: str, docset: str = "all", top_k: int = 4) -> str:
         meaningful_missing = [t for t in missing_terms if len(t) > 2 and t not in {"the", "and", "for", "with", "how", "all", "get", "api", "use"}]
         if meaningful_missing:
             output += (
-                f"\n---\n💡 [agents-docs notice]: No direct matches for term(s): {', '.join(meaningful_missing)} in searched docsets.\n"
-                f"• If querying multiple distinct providers/libraries, query each individually or verify if a dedicated docset exists via `list_catalog()` / `list_docsets()`.\n"
-                f"• To install additional official docs: `sync_docset(name='...')` or `sync_docset(name='<custom>', url='<llms.txt-url>')`.\n"
+                f"\n---\n💡 [agents-docs notice]: No direct matches for term(s): {', '.join(meaningful_missing)} in searched docs.\n"
+                f"• Check `list_docs()` or query specific category: `search_docs(query='...', category='stacks|models|apis|platforms|custom')`.\n"
             )
 
     return output
 
 
 @mcp.tool()
-def get_doc_page(docset: str, rel_path: str) -> str:
+def get_doc(name: str, category: str = "all") -> str:
     """
-    Fetch the complete raw markdown of a specific documentation page.
+    Fetch the complete raw markdown of a technical fact sheet, spec, or playbook.
     
     Args:
-        docset: Name of the docset (e.g. 'svelte-5')
-        rel_path: Relative path to the markdown file within the docset (e.g. 'docs.md' or 'runes/state.md')
+        name: Name or relative path of the doc (e.g. 'tailwind-v3', 'stacks/fastapi.md', 'coolify-db', 'ai-models/pricing_and_specs.md')
+        category: Optional category filter ('stacks', 'models', 'apis', 'platforms', 'custom', or 'all').
     """
-    content = store.get_document(docset=docset, rel_path=rel_path)
+    content = store.get_doc(name=name, category=category)
     if content is None:
-        return f"Error: Page '{rel_path}' not found in docset '{docset}'."
+        return f"Error: Document '{name}' not found in category '{category}'."
     return content
 
 
 @mcp.tool()
-def list_catalog() -> str:
+def write_doc(
+    name: str,
+    content: str,
+    category: str = "custom",
+    overwrite: bool = True,
+) -> str:
     """
-    List curated pre-configured framework docsets available for 1-click sync.
-    Includes Svelte 5, FastAPI, Next.js, Supabase, Tailwind v3/v4, Tauri 2, Hono, MCP, WXT.
+    Write or update a durable technical fact sheet, cheat-sheet, API spec, stack standard, or platform note.
+    
+    CALL PROACTIVELY to store verified framework rules, platform facts, API nuances, and tool specifications.
+    
+    Args:
+        name: Short document identifier (e.g. 'powershell-gotchas', 'ahasend-api', 'tailwind-v3', 'coolify-db-ports')
+        content: Complete markdown document content with headers and code blocks
+        category: One of 'stacks' (frameworks/libs), 'models' (LLM specs), 'apis' (protocol/APIs), 'platforms' (OS/Infra/DB), 'custom' (general cheatsheets)
+        overwrite: Set to True (default) to overwrite existing document.
     """
-    entries = list_catalog_entries()
-    return json.dumps({"catalog": entries, "count": len(entries)}, indent=2)
+    try:
+        saved_path = store.save_doc(
+            name=name,
+            content=content,
+            category=category,
+            overwrite=overwrite,
+        )
+        return f"Saved technical doc '{name}' to {saved_path}"
+    except Exception as e:
+        return f"Error saving technical doc: {e}"
 
 
 @mcp.tool()
-def sync_docset(name: str, url: Optional[str] = None) -> str:
+def delete_doc(name: str, category: str = "custom") -> str:
     """
-    Synchronize or update a documentation set from the curated catalog or a custom URL.
+    Delete a technical fact sheet or docset.
     
     Args:
-        name: Name of the catalog item (e.g. 'svelte-5', 'fastapi', 'tailwind-v3') or a custom docset identifier.
-        url: Optional custom URL (pointing to llms.txt, llms-full.txt, or raw markdown) if name is not in catalog.
+        name: Document identifier to delete
+        category: Category where the doc resides ('stacks', 'models', 'apis', 'platforms', 'custom')
+    """
+    try:
+        removed = store.delete_doc(name=name, category=category)
+        if removed:
+            return f"Deleted document '{name}' from '{category}'."
+        return f"Document '{name}' not found in '{category}'."
+    except Exception as e:
+        return f"Error deleting document: {e}"
+
+
+@mcp.tool()
+def list_docs(category: str = "all") -> str:
+    """
+    List all indexed technical documents, fact sheets, API specs, and playbooks with category and size.
+    
+    Args:
+        category: Filter by category ('stacks', 'models', 'apis', 'platforms', 'custom', or 'all')
+    """
+    docs = store.list_docs(category=category)
+    if not docs:
+        return json.dumps({
+            "message": f"No documents found in category '{category}'. Use write_doc() to add technical facts.",
+            "docs": [],
+            "docs_root": str(store.root),
+        }, indent=2)
+    return json.dumps({"docs": docs, "count": len(docs), "docs_root": str(store.root)}, indent=2)
+
+
+@mcp.tool()
+def sync_external_doc(name: str, url: Optional[str] = None) -> str:
+    """
+    Fetch/synchronize an external documentation set from curated catalog or custom llms.txt URL.
+    
+    Args:
+        name: Name of the catalog item (e.g. 'svelte-5', 'fastapi', 'tailwind-v3') or custom identifier.
+        url: Optional custom URL (pointing to llms.txt, llms-full.txt, or raw markdown).
     """
     target_url = url
     if not target_url:
@@ -164,50 +204,13 @@ def sync_docset(name: str, url: Optional[str] = None) -> str:
 
 
 @mcp.tool()
-def sync_project_docs(project_path: str) -> str:
+def list_catalog() -> str:
     """
-    Inspect a project directory (package.json, requirements.txt, pyproject.toml, Cargo.toml),
-    detect used frameworks/libraries, and auto-sync all matching official documentation sets.
-    
-    Args:
-        project_path: Absolute or relative path to project root folder
+    List curated pre-configured framework docsets available for 1-click sync.
+    Includes Svelte 5, FastAPI, Next.js, Supabase, Tailwind v3/v4, Tauri 2, Hono, MCP, WXT.
     """
-    detected = detect_project_docsets(project_path)
-    if not detected:
-        return f"No catalog-matched framework dependencies detected in '{project_path}'."
-
-    synced_results = []
-    for docset_name in detected:
-        _ensure_docset_fresh(docset_name)
-        synced_results.append(docset_name)
-
-    return json.dumps({
-        "status": "success",
-        "project_path": project_path,
-        "synced_docsets": synced_results,
-    }, indent=2)
-
-
-@mcp.tool()
-def sync_memory_docs() -> str:
-    """
-    Scan local agents-memory (~/.agents/memory/PROJECTS.md & projects/*.md),
-    detect all active tech stacks/frameworks, and auto-sync matching documentation sets.
-    """
-    detected = detect_memory_docsets()
-    if not detected:
-        return "No catalog-matched framework stacks found in agents-memory."
-
-    synced_results = []
-    for docset_name in detected:
-        _ensure_docset_fresh(docset_name)
-        synced_results.append(docset_name)
-
-    return json.dumps({
-        "status": "success",
-        "source": "~/.agents/memory/",
-        "synced_docsets": synced_results,
-    }, indent=2)
+    entries = list_catalog_entries()
+    return json.dumps({"catalog": entries, "count": len(entries)}, indent=2)
 
 
 @mcp.tool()
@@ -221,4 +224,5 @@ def get_model_playbook(model: str = "auto") -> str:
     """
     from .playbooks import resolve_model_playbook
     return resolve_model_playbook(model_query=model)
+
 

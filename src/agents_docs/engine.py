@@ -102,31 +102,48 @@ class DocsEngine:
 
         return sections
 
-    def _get_target_docsets(self, docset: str) -> List[str]:
-        if docset.strip().lower() in ["all", "*"]:
-            return [d["name"] for d in self.list_docsets()]
-        return [docset.strip().lower()]
+    def _collect_sections(self, target: str) -> Tuple[List[DocSection], List[str]]:
+        clean = target.strip().lower()
+        all_sections: List[DocSection] = []
+        searched: List[str] = []
+
+        if clean in ["all", "*"]:
+            searched = ["all"]
+            for mf in sorted(self.store.root.rglob("*.md")):
+                if mf.is_file() and not mf.name.startswith("."):
+                    rel = str(mf.relative_to(self.store.root)).replace("\\", "/")
+                    label = rel.split("/")[0] if "/" in rel else mf.stem
+                    all_sections.extend(self._split_markdown_sections(label, mf))
+            return all_sections, searched
+
+        # 1. Check if matches category folder or docset folder
+        searched = [clean]
+        target_dir = self.store.get_docset_dir(clean)
+        if target_dir.exists() and target_dir.is_dir():
+            for mf in sorted(target_dir.rglob("*.md")):
+                if mf.is_file() and not mf.name.startswith("."):
+                    all_sections.extend(self._split_markdown_sections(clean, mf))
+        
+        # 2. Check if it matches a file or subfolder across categories
+        if not all_sections:
+            for cat in ("stacks", "models", "apis", "platforms", "custom"):
+                cat_file = self.store.root / cat / f"{clean}.md"
+                if cat_file.is_file():
+                    all_sections.extend(self._split_markdown_sections(cat, cat_file))
+                cat_dir = self.store.root / cat / clean
+                if cat_dir.is_dir():
+                    for mf in sorted(cat_dir.rglob("*.md")):
+                        if mf.is_file() and not mf.name.startswith("."):
+                            all_sections.extend(self._split_markdown_sections(f"{cat}/{clean}", mf))
+
+        return all_sections, searched
 
     def search_detailed(self, docset: str, query: str, top_k: int = 4) -> Dict[str, Any]:
         """
         Fast BM25 + Header-Boost + Term Coverage Lexical Search over markdown sections.
         Returns results along with missing query term diagnostics.
         """
-        target_docsets = self._get_target_docsets(docset)
-        if not target_docsets:
-            return {"results": [], "missing_terms": [], "searched_docsets": []}
-
-        all_sections: List[DocSection] = []
-        for ds in target_docsets:
-            ds_dir = self.store.get_docset_dir(ds)
-            if not ds_dir.exists():
-                continue
-            md_files = list(ds_dir.rglob("*.md")) + list(ds_dir.rglob("*.mdx"))
-            for mf in md_files:
-                if mf.name.startswith("."):
-                    continue
-                all_sections.extend(self._split_markdown_sections(ds, mf))
-
+        all_sections, target_docsets = self._collect_sections(docset)
         if not all_sections:
             return {"results": [], "missing_terms": [], "searched_docsets": target_docsets}
 
