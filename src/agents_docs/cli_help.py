@@ -8,10 +8,21 @@ import sys
 
 
 def emit_help_json(argv: list[str], parser: argparse.ArgumentParser, name: str = "agents-docs") -> None:
-    """Emit machine-readable CLI specification as JSON."""
+    """Emit machine-readable CLI specification as JSON, including subcommands."""
     actions = []
+    commands = []
     for action in parser._actions:
         if action.dest == "help":
+            continue
+        if isinstance(action, argparse._SubParsersAction):
+            helps = {}
+            for choice in getattr(action, "_choices_actions", []):
+                helps[choice.dest] = choice.help or ""
+            for cmd, sub in action.choices.items():
+                commands.append({
+                    "name": cmd,
+                    "help": helps.get(cmd) or (sub.description or ""),
+                })
             continue
         actions.append({
             "dest": action.dest,
@@ -24,5 +35,6 @@ def emit_help_json(argv: list[str], parser: argparse.ArgumentParser, name: str =
         "command": name,
         "description": parser.description or "",
         "arguments": actions,
+        "commands": commands,
     }
     print(json.dumps(payload, indent=2))

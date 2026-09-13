@@ -118,18 +118,20 @@ def write_doc(
     name: str,
     content: str,
     category: str = "custom",
-    overwrite: bool = True,
+    overwrite: bool = False,
 ) -> str:
     """
-    Write or update a durable technical fact sheet, cheat-sheet, API spec, stack standard, or platform note.
-    
-    CALL PROACTIVELY to store verified framework rules, platform facts, API nuances, and tool specifications.
-    
+    Append a durable technical fact (API spec, stack rule, model capability, platform note).
+
+    Default appends a dated section. Does not clobber. Use overwrite=True only to replace a wrong sheet.
+    Hard tech facts belong here. User prefs and project fluid facts belong in agents-memory, not docs.
+    delete_doc is for wrong/duplicate/yanked sheets — not for an old model that is still true.
+
     Args:
-        name: Short document identifier (e.g. 'powershell-gotchas', 'ahasend-api', 'tailwind-v3', 'coolify-db-ports')
-        content: Complete markdown document content with headers and code blocks
-        category: One of 'stacks' (frameworks/libs), 'models' (LLM specs), 'apis' (protocol/APIs), 'platforms' (OS/Infra/DB), 'custom' (general cheatsheets)
-        overwrite: Set to True (default) to overwrite existing document.
+        name: Short document identifier (e.g. 'powershell-gotchas', 'ahasend-api', 'coolify-db-ports')
+        content: Markdown fact to append (or full replacement when overwrite=True)
+        category: One of 'stacks' (frameworks/libs), 'models' (LLM specs), 'apis' (protocol/APIs), 'platforms' (OS/Infra/DB), 'custom'
+        overwrite: False (default) appends. True replaces the entire file.
     """
     try:
         saved_path = store.save_doc(
@@ -146,7 +148,9 @@ def write_doc(
 @mcp.tool()
 def delete_doc(name: str, category: str = "custom") -> str:
     """
-    Delete a technical fact sheet or docset.
+    Delete a technical fact sheet that is wrong, duplicate, or yanked.
+
+    Do not delete because a fact is old. Old-but-still-true model/API notes stay.
     
     Args:
         name: Document identifier to delete

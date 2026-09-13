@@ -7,8 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- CLI `write` (alias `add`) so Cordis can shell `python -m agents_docs write NAME CONTENT [CATEGORY]`.
+
 ### Changed
 - CI runs only on pull requests to `main`.
+- `write_doc` / CLI `write` default to append a dated section instead of clobbering. Pass `overwrite=True` / `--overwrite` to replace a wrong sheet.
+- Catalog prune and `save_document` skip/refuse the category dirs so agent sheets in `stacks|models|apis|platforms|custom` are not wiped.
+- `--help-json` lists subcommands including `write` / `add`.
 
 ### Removed
 - GitHub Release is no longer cut automatically on `v*.*.*` tags (manual `gh release create` from CHANGELOG instead).

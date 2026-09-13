@@ -1,7 +1,7 @@
 # agents-docs
 
 <p align="left">
-  <a href="https://github.com/Lolaplex/agents-docs/releases"><img src="https://img.shields.io/badge/version-0.42.0-blue.svg?style=flat-square" alt="Version 0.42.0"></a>
+  <a href="https://github.com/Lolaplex/agents-docs/releases"><img src="https://img.shields.io/badge/version-0.43.0-blue.svg?style=flat-square" alt="Version 0.43.0"></a>
   <a href="https://modelcontextprotocol.io"><img src="https://img.shields.io/badge/MCP-Standard-orange.svg?style=flat-square" alt="MCP"></a>
   <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.10+-3776AB.svg?style=flat-square&logo=python&logoColor=white" alt="Python 3.10+"></a>
   <a href="https://pypi.org/project/agents-docs/"><img src="https://img.shields.io/pypi/v/agents-docs.svg?style=flat-square" alt="PyPI"></a>
@@ -10,6 +10,16 @@
 
 **Local markdown docsets with header-aware BM25 search.**  
 Fetch a catalog name or URL into `~/.agents/docs/`. Shared across **Cursor**, **Claude Code**, **Antigravity**, and **Zed**.
+
+## Memory vs Docs
+
+Docs is the historically-true tech-fact register. Memory is user/project fluid facts. Do not merge them.
+
+- Hard tech fact (API, stack rule, model spec, platform truth) → `write_doc` / `python -m agents_docs write NAME CONTENT [CATEGORY]`.
+- User prefs, project decisions, identity → agents-memory (`add_memory` / `python -m agents_memory add`).
+- Append-mostly. `delete_doc` is for wrong, duplicate, or yanked sheets — not because a model is old.
+- Catalog `sync` writes root docsets. It must not rewrite agent sheets under `stacks|models|apis|platforms|custom`.
+- Categories: `stacks`, `models`, `apis`, `platforms`, `custom`. Do not dump READMEs into docs.
 
 ---
 
@@ -89,6 +99,7 @@ Traditional vector-embedding RAG solutions are bloated: they require Docker cont
 | `agents-docs sync <name> --url <URL>` | Ingests any custom `llms.txt`, `llms-full.txt`, or markdown URL |
 | `agents-docs search "<query>"` | Fast BM25 search across all installed docsets |
 | `agents-docs search "<query>" --docset <name>` | Scoped search within a specific documentation set |
+| `agents-docs write NAME CONTENT [CATEGORY]` | Append a hard tech fact (alias: `add`). `--overwrite` replaces |
 | `agents-docs prune` | In-place noise & boilerplate cleaner across all installed docs |
 | `agents-docs list` | Lists all installed docsets on disk with file and byte counts |
 | `agents-docs serve` | Runs the FastMCP stdio server (default) |
@@ -99,13 +110,13 @@ Traditional vector-embedding RAG solutions are bloated: they require Docker cont
 
 | Tool | Parameters | Description |
 | :--- | :--- | :--- |
-| `list_docsets` | *None* | Lists all installed docsets in `~/.agents/docs/` with file counts and byte sizes. |
-| `search_docs` | `query`, `docset` (default: `"all"`), `top_k` (default: `4`) | Returns top matching markdown sections with headers and code blocks in milliseconds. Auto-syncs missing catalog docsets on demand. |
-| `get_doc_page` | `docset`, `rel_path` | Returns the raw markdown content of a specific file. |
-| `list_catalog` | *None* | Lists all 21+ pre-configured frameworks and model catalogs available for 1-click sync. |
-| `sync_docset` | `name`, `url` (optional) | Downloads/updates official documentation from the catalog or custom `llms.txt` / markdown URL. |
-| `sync_project_docs` | `project_path` | Inspects `package.json`, `requirements.txt`, `pyproject.toml`, `Cargo.toml` and auto-syncs detected docsets. |
-| `sync_memory_docs` | *None* | Scans `~/.agents/memory/PROJECTS.md` and syncs all active stacks. |
+| `search_docs` | `query`, `category` (default: `"all"`), `top_k` (default: `4`) | Header-aware BM25 over stacks/models/apis/platforms/custom (and catalog docsets). |
+| `get_doc` | `name`, `category` | Raw markdown of one fact sheet. |
+| `write_doc` | `name`, `content`, `category` (default: `"custom"`), `overwrite` (default: `false`) | Append a dated tech fact. `overwrite=true` replaces. |
+| `delete_doc` | `name`, `category` | Delete a wrong/duplicate/yanked sheet. Not for old-but-still-true facts. |
+| `list_docs` | `category` (default: `"all"`) | Lists fact sheets with category and size. |
+| `list_catalog` | *None* | Curated framework catalog for 1-click sync. |
+| `sync_external_doc` | `name`, `url` (optional) | Fetch a catalog item or custom `llms.txt` / markdown URL. |
 
 ---
 
