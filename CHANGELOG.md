@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Support for uniform `docs:` locator prefix and section anchors in `get_doc` and `delete_doc` (e.g. `docs:stacks/fastapi.md#section`).
+- `search_docs` results include `[docs:<docset>]` locator for clean cross-brain referencing.
 - CLI `write` (alias `add`) so Cordis can shell `python -m agents_docs write NAME CONTENT [CATEGORY]`.
 
 ### Changed

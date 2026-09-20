@@ -36,7 +36,12 @@ class DocsStore:
             (self.root / cat).mkdir(parents=True, exist_ok=True)
 
     def _clean_stem(self, name: str) -> str:
-        clean = name.strip().replace("\\", "/").strip("/")
+        clean = name.strip()
+        if clean.startswith("docs:"):
+            clean = clean[len("docs:") :].strip()
+        if "#" in clean:
+            clean = clean.split("#")[0].strip()
+        clean = clean.replace("\\", "/").strip("/")
         if clean.lower().endswith(".md"):
             clean = clean[:-3]
         elif clean.lower().endswith(".mdx"):
@@ -86,6 +91,10 @@ class DocsStore:
         Retrieve markdown content of a fact sheet by name or relative path.
         """
         clean_name = name.strip()
+        if clean_name.startswith("docs:"):
+            clean_name = clean_name[len("docs:") :].strip()
+        if "#" in clean_name:
+            clean_name = clean_name.split("#")[0].strip()
         stem = self._clean_stem(clean_name)
         clean_cat = category.strip().lower()
 

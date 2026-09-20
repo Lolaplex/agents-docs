@@ -62,8 +62,11 @@ class TestMCPServer(unittest.TestCase):
                 self.assertIn("Saved technical doc 'test-cdp-spec'", res_write)
                 content = get_doc(name="test-cdp-spec", category="apis")
                 self.assertIn("Chrome DevTools Protocol", content)
+                content_uniform = get_doc(name="docs:apis/test-cdp-spec#Page-Domain")
+                self.assertIn("Chrome DevTools Protocol", content_uniform)
                 res_search = search_docs(query="Page.enable page events", category="apis")
                 self.assertIn("Chrome DevTools Protocol", res_search)
+                self.assertIn("docs:apis", res_search)
                 res_del = delete_doc(name="test-cdp-spec", category="apis")
                 self.assertIn("Deleted document 'test-cdp-spec'", res_del)
 

@@ -83,7 +83,7 @@ def search_docs(query: str, category: str = "all", top_k: int = 4) -> str:
     formatted = []
     for r in results:
         formatted.append(
-            f"### [{r['docset']}] {r['file']}#L{r['line']} — {r['header']} (Score: {r['score']})\n\n{r['snippet']}\n"
+            f"### [docs:{r['docset']}] {r['file']}#L{r['line']} — {r['header']} (Score: {r['score']})\n\n{r['snippet']}\n"
         )
     output = "\n---\n\n".join(formatted)
 
