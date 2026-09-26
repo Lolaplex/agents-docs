@@ -91,7 +91,7 @@ def search_docs(query: str, category: str = "all", top_k: int = 4) -> str:
         meaningful_missing = [t for t in missing_terms if len(t) > 2 and t not in {"the", "and", "for", "with", "how", "all", "get", "api", "use"}]
         if meaningful_missing:
             output += (
-                f"\n---\n💡 [agents-docs notice]: No direct matches for term(s): {', '.join(meaningful_missing)} in searched docs.\n"
+                f"\n---\n[agents-docs notice]: No direct matches for term(s): {', '.join(meaningful_missing)} in searched docs.\n"
                 f"• Check `list_docs()` or query specific category: `search_docs(query='...', category='stacks|models|apis|platforms|custom')`.\n"
             )
 
@@ -128,7 +128,7 @@ def write_doc(
     delete_doc is for wrong/duplicate/yanked sheets — not for an old model that is still true.
 
     Args:
-        name: Short document identifier (e.g. 'powershell-gotchas', 'ahasend-api', 'coolify-db-ports')
+        name: Short document identifier (e.g. 'powershell-gotchas', 'stripe-api', 'coolify-db-ports')
         content: Markdown fact to append (or full replacement when overwrite=True)
         category: One of 'stacks' (frameworks/libs), 'models' (LLM specs), 'apis' (protocol/APIs), 'platforms' (OS/Infra/DB), 'custom'
         overwrite: False (default) appends. True replaces the entire file.

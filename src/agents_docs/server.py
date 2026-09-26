@@ -73,7 +73,7 @@ def ingest_local_folder(name: str, source_path: str) -> str:
     Ingest a local folder containing markdown/mdx files into ~/.agents/docs/<name>.
     
     Args:
-        name: Identifier name for the docset (e.g. 'tauri-2', 'omnus-docs')
+        name: Identifier name for the docset (e.g. 'tauri-2', 'fastapi-docs')
         source_path: Absolute or relative local directory path
     """
     try:

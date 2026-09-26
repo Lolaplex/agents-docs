@@ -231,7 +231,7 @@ def format_playbook_markdown(p: Dict[str, Any]) -> str:
         "",
         "---",
         "",
-        "## 🚀 Core Operational Strengths",
+        "## Core Operational Strengths",
         "",
     ]
     for s in strengths:
@@ -239,7 +239,7 @@ def format_playbook_markdown(p: Dict[str, Any]) -> str:
 
     lines.extend([
         "",
-        "## ⚠️ Known Traps & Failure Modes (Self-Correction)",
+        "## Known Traps & Failure Modes (Self-Correction)",
         "",
     ])
     for t in traps:
@@ -247,7 +247,7 @@ def format_playbook_markdown(p: Dict[str, Any]) -> str:
 
     lines.extend([
         "",
-        "## 🎯 Actionable Rules of Engagement",
+        "## Actionable Rules of Engagement",
         "",
     ])
     for r in rules:

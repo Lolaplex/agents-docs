@@ -13,9 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CLI `write` (alias `add`) so Cordis can shell `python -m agents_docs write NAME CONTENT [CATEGORY]`.
 
 ### Changed
-- CI runs only on pull requests to `main`.
+- CI runs only on pull requests to `main` with strict bundled verification.
 - `write_doc` / CLI `write` default to append a dated section instead of clobbering. Pass `overwrite=True` / `--overwrite` to replace a wrong sheet.
 - Catalog prune and `save_document` skip/refuse the category dirs so agent sheets in `stacks|models|apis|platforms|custom` are not wiped.
+- Cleaned emojis in playbooks and server notices, sanitized docstrings and example identifiers across server modules.
 - `--help-json` lists subcommands including `write` / `add`.
 
 ### Removed
