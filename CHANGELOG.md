@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.44.1] - 2026-09-26
+
+### Changed
+- README matches the live install (`init` does not download docsets), the eight MCP tools, and the CLI (`playbook`, `ingest`, `skills`, `sync-mcp`).
+- `abi/MCP.md` lists those tools. `docs-sync` calls `sync_external_doc`.
+- Layout contract includes fact-sheet categories. Catalog contract matches `llmstxt` and `bundled`. `abi/CLI.md` is the command contract.
+
 ## [0.44.0] - 2026-09-26
 
 ### Added
@@ -43,7 +50,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - In-place noise pruner that strips HTML wrappers and nav clutter without touching code blocks or tables.
 - Multi-IDE MCP and skills autowire (Cursor, Antigravity, Claude Desktop, Zed).
 
-[Unreleased]: https://github.com/Lolaplex/agents-docs/compare/v0.44.0...HEAD
+[Unreleased]: https://github.com/Lolaplex/agents-docs/compare/v0.44.1...HEAD
+[0.44.1]: https://github.com/Lolaplex/agents-docs/compare/v0.44.0...v0.44.1
 [0.44.0]: https://github.com/Lolaplex/agents-docs/compare/v0.43.0...v0.44.0
 [0.43.0]: https://github.com/Lolaplex/agents-docs/compare/v0.42.0...v0.43.0
 [0.42.0]: https://github.com/Lolaplex/agents-docs/releases/tag/v0.42.0
