@@ -1,39 +1,51 @@
-# Filesystem Layout
+# Filesystem layout
 
-All documentation sets reside under the global agent documentation directory:
+Root: `~/.agents/docs/` (override `AGENTS_DOCS_PATH`).
 
-`~/.agents/docs/` (Configurable via `$env:AGENTS_DOCS_PATH`)
+Two kinds of trees live side by side. Catalog sync and `prune` must not rewrite the category trees.
 
-## Directory Hierarchy
+## Fact sheets
+
+Created on `init`. Agents file these with `write_doc` / `agents-docs write`.
 
 ```
 ~/.agents/docs/
-  ├── svelte-5/
-  │   ├── .meta.json           # Ingestion metadata (source URL, timestamp, version)
-  │   ├── overview.md
-  │   ├── runes/
-  │   │   ├── state.md
-  │   │   └── derived.md
-  │   └── ...
-  ├── fastapi/
-  │   ├── .meta.json
-  │   ├── tutorial.md
-  │   └── advanced.md
-  └── tailwind-v3/
-      ├── .meta.json
-      └── docs.md
+  stacks/
+  models/
+  apis/
+  platforms/
+  custom/
 ```
 
-## `.meta.json` Schema
+One markdown file per sheet: `<category>/<stem>.md`. Default write appends a dated section. `overwrite` replaces the file.
 
-Each docset directory can optionally include `.meta.json`:
+## Docsets
+
+One directory per catalog name, custom sync name, or `ingest` name. Not inside the five category dirs. `save_document` refuses a docset name that is a category.
+
+```
+~/.agents/docs/
+  svelte-5/
+    .meta.json
+    docs.md
+  typescript/
+    .meta.json
+    Basics.md
+```
+
+`llms-full.txt` and single markdown URLs land in `docs.md`. An `llms.txt` index follows its links into separate files. `ingest` copies a local folder as-is.
+
+## `.meta.json`
+
+Written by fetch. Readers tolerate a missing file.
 
 ```json
 {
   "name": "svelte-5",
   "source": "https://svelte.dev/docs/llms-full.txt",
-  "source_type": "llmstxt",
-  "updated_at": "2026-08-20T03:00:00Z",
-  "version": "5.x"
+  "source_type": "llmstxt_full",
+  "updated_at": "2026-09-26T12:00:00+00:00"
 }
 ```
+
+`updated_at` is ISO-8601 from the writer. `search_docs` on a catalog name refetches when the docset is missing or older than 7 days (`ai-models`: 1 day).

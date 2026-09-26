@@ -1,22 +1,22 @@
-# Curated Catalog Specification
+# Curated catalog
 
-The built-in catalog provides zero-effort access to official documentation for standard modern developer stacks.
+The catalog is the dict in `src/agents_docs/catalog.py`. `list_catalog` and `agents-docs catalog` print it. `sync` / `sync_external_doc` fetch one name.
 
-## Catalog Schema
-
-Each catalog item definition in `catalog.py`:
+## Entry
 
 ```python
 {
     "name": "svelte-5",
-    "description": "Svelte 5 Official Documentation & Runes Guide",
-    "source_type": "llmstxt" | "github" | "markdown_url",
+    "description": "Svelte 5 Official Documentation, Runes, and Migration Guide",
+    "source_type": "llmstxt",
     "url": "https://svelte.dev/docs/llms-full.txt",
-    "tags": ["frontend", "svelte", "javascript", "typescript"]
+    "tags": ["frontend", "svelte", "typescript", "ui"],
+    "detect": ["svelte"],
 }
 ```
 
-## Supported Source Types
-1. `llmstxt`: Single or multi-file `llms.txt` or `llms-full.txt` endpoints.
-2. `github`: GitHub repository docs folder or raw markdown release.
-3. `markdown_url`: Direct link to an aggregated markdown resource.
+`source_type` in the catalog is `llmstxt` or `bundled` (`ai-models`, url `bundled://ai-models`). Fetch then records a finer `source_type` on `.meta.json` (`llmstxt_full`, `llmstxt_index`, `llmstxt_raw`, `direct_markdown`, `bundled`).
+
+`detect` is a list of manifest substrings. It does not auto-sync a project. An agent calls `sync_external_doc` or `agents-docs sync` itself.
+
+Unknown name without `--url` / `url` is an error. A custom URL bypasses the catalog.

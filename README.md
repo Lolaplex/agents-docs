@@ -105,6 +105,7 @@ Layout and contracts in [`abi/`](abi/):
 - [`WHY.md`](abi/WHY.md) — markdown + BM25 instead of a vector database
 - [`LAYOUT.md`](abi/LAYOUT.md) — `~/.agents/docs/` taxonomy
 - [`MCP.md`](abi/MCP.md) — tool surface
+- [`CLI.md`](abi/CLI.md) — commands
 - [`CATALOG.md`](abi/CATALOG.md) — catalog schema
 - [`LLMSTXT.md`](abi/LLMSTXT.md) — `llms.txt` fetch
 
