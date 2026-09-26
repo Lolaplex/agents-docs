@@ -1,47 +1,42 @@
-# MCP Tool Surface Specification
+# MCP surface
 
-The `agents-docs` server exposes the following MCP tools for AI coding agents:
+The Python server in this repository (`python -m agents_docs serve`, FastMCP) is the live tool list. `src/agents_docs/server.py` is not mounted.
 
-## 1. `list_docsets`
-- **Description**: Returns all installed framework docsets with file and section counts.
-- **Parameters**: None.
-- **Returns**: JSON array of docset descriptors.
+## Tools
 
-## 2. `search_docs`
-- **Description**: Fast BM25 + header-boost search across a specific docset or across all docsets.
-- **Parameters**:
-  - `docset` (string): Target docset name (e.g. `'svelte-5'`, `'fastapi'`, or `'all'`).
-  - `query` (string): Keywords, function names, or natural language query.
-  - `top_k` (integer, optional): Maximum sections to return (default: 4).
-- **Returns**: Formatted markdown snippets containing file path, line numbers, header, and code examples.
+### `search_docs(query, category="all", top_k=4)`
 
-## 3. `get_doc_page`
-- **Description**: Retrieves the raw content of a specific documentation file.
-- **Parameters**:
-  - `docset` (string): Docset name.
-  - `rel_path` (string): Relative file path within the docset.
-- **Returns**: Markdown content string.
+Header-aware BM25 over fact sheets and docsets.
 
-## 4. `list_catalog`
-- **Description**: Lists curated pre-configured framework docsets available for 1-click sync.
-- **Parameters**: None.
-- **Returns**: JSON object with framework names, descriptions, and source types.
+- `category`: `all`, one of `stacks|models|apis|platforms|custom`, or a docset name (`svelte-5`, `ai-models`, …).
+- A catalog docset is fetched when missing and refreshed when stale (7 days; `ai-models` 1 day).
 
-## 5. `sync_docset`
-- **Description**: Synchronizes or updates a docset from the curated catalog or a custom source URL.
-- **Parameters**:
-  - `name` (string): Name of the catalog item or custom identifier.
-  - `url` (string, optional): Custom URL (`llms.txt`, GitHub repository, or raw markdown) if not using catalog name.
-- **Returns**: Status and number of files/bytes synced.
+Returns markdown sections with a `docs:<docset>` locator, file, line, and header.
 
-## 6. `sync_project_docs`
-- **Description**: Inspects project manifests (`package.json`, `requirements.txt`, `pyproject.toml`, `Cargo.toml`), detects frameworks, and auto-syncs official docsets.
-- **Parameters**:
-  - `project_path` (string): Path to project root.
-- **Returns**: JSON object with detected and synced docsets.
+### `get_doc(name, category="all")`
 
-## 7. `sync_memory_docs`
-- **Description**: Scans `~/.agents/memory/PROJECTS.md` and auto-syncs matching documentation sets.
-- **Parameters**: None.
-- **Returns**: Status and list of synced docsets.
+Raw markdown of one sheet. `name` may be a stem, `category/file.md`, or a `docs:` locator with an optional `#section` anchor.
 
+### `write_doc(name, content, category="custom", overwrite=false)`
+
+Append a dated section. `overwrite=true` replaces the file. Hard tech facts only. User and project fluid facts belong in agents-memory.
+
+### `delete_doc(name, category="custom")`
+
+Delete a wrong, duplicate, or yanked sheet. Not for an old fact that is still true. No CLI mirror.
+
+### `list_docs(category="all")`
+
+JSON list of fact sheets with category and size. This is not `agents-docs list` (that command counts docset files).
+
+### `list_catalog()`
+
+JSON catalog: 21 names, descriptions, source URLs. Fetch with `sync_external_doc` or `agents-docs sync`.
+
+### `sync_external_doc(name, url=None)`
+
+Fetch a catalog item or a custom `llms.txt` / markdown URL into `~/.agents/docs/<name>/`. Does not rewrite category fact sheets.
+
+### `get_model_playbook(model="auto")`
+
+Operational playbook for a model name or family. CLI mirror: `agents-docs playbook`.

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- README matches the live install (`init` does not download docsets), the eight MCP tools, and the CLI (`playbook`, `ingest`, `skills`, `sync-mcp`).
+- `abi/MCP.md` lists those tools. `docs-sync` calls `sync_external_doc`.
+
 ## [0.44.0] - 2026-09-26
 
 ### Added
