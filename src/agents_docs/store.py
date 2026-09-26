@@ -36,7 +36,12 @@ class DocsStore:
             (self.root / cat).mkdir(parents=True, exist_ok=True)
 
     def _clean_stem(self, name: str) -> str:
-        clean = name.strip().replace("\\", "/").strip("/")
+        clean = name.strip()
+        if clean.startswith("docs:"):
+            clean = clean[len("docs:") :].strip()
+        if "#" in clean:
+            clean = clean.split("#")[0].strip()
+        clean = clean.replace("\\", "/").strip("/")
         if clean.lower().endswith(".md"):
             clean = clean[:-3]
         elif clean.lower().endswith(".mdx"):
@@ -44,13 +49,8 @@ class DocsStore:
         return clean.lower().replace(" ", "-")
 
     def get_docset_dir(self, name: str) -> Path:
-        """Returns the directory path for a named docset or category."""
+        """Root-level catalog/legacy dir. Never resolves into category folders."""
         clean_name = name.strip().lower().replace(" ", "-")
-        # If matches an existing subfolder in a category, return that
-        for cat in DEFAULT_CATEGORIES:
-            cat_target = self.root / cat / clean_name
-            if cat_target.is_dir():
-                return cat_target
         return self.root / clean_name
 
     def save_doc(
@@ -58,11 +58,11 @@ class DocsStore:
         name: str,
         content: str,
         category: str = "custom",
-        overwrite: bool = True,
+        overwrite: bool = False,
     ) -> Path:
         """
-        Save/write a technical markdown fact-sheet or doc in a specific category.
-        Categories: stacks, models, apis, platforms, custom.
+        Write a technical markdown fact-sheet.
+        Default: append a dated section if the file exists. overwrite=True replaces.
         """
         clean_cat = category.strip().lower() if category.strip() else "custom"
         if clean_cat not in DEFAULT_CATEGORIES:
@@ -73,12 +73,17 @@ class DocsStore:
 
         stem = self._clean_stem(name)
         target_file = cat_dir / f"{stem}.md"
+        body = content if content.endswith("\n") else content + "\n"
 
         if target_file.exists() and not overwrite:
-            raise FileExistsError(f"Doc '{stem}' already exists in category '{clean_cat}'.")
+            existing = target_file.read_text(encoding="utf-8")
+            stamp = datetime.now(timezone.utc).date().isoformat()
+            block = f"\n## {stamp}\n\n{body}"
+            target_file.write_text(existing.rstrip() + "\n" + block, encoding="utf-8")
+            return target_file
 
         target_file.parent.mkdir(parents=True, exist_ok=True)
-        target_file.write_text(content, encoding="utf-8")
+        target_file.write_text(body, encoding="utf-8")
         return target_file
 
     def get_doc(self, name: str, category: str = "all") -> Optional[str]:
@@ -86,6 +91,10 @@ class DocsStore:
         Retrieve markdown content of a fact sheet by name or relative path.
         """
         clean_name = name.strip()
+        if clean_name.startswith("docs:"):
+            clean_name = clean_name[len("docs:") :].strip()
+        if "#" in clean_name:
+            clean_name = clean_name.split("#")[0].strip()
         stem = self._clean_stem(clean_name)
         clean_cat = category.strip().lower()
 
@@ -271,8 +280,14 @@ class DocsStore:
         meta_file.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
     def save_document(self, docset: str, rel_path: str, content: str) -> Path:
-        """Save a single markdown document within a docset (legacy compatibility)."""
-        target_file = self.get_docset_dir(docset) / rel_path
+        """Save a catalog/legacy page at store root. Refuses category names."""
+        clean = docset.strip().lower().replace(" ", "-")
+        if clean in DEFAULT_CATEGORIES:
+            raise ValueError(
+                f"Refusing catalog write into category '{clean}'. "
+                "Agent sheets live in stacks|models|apis|platforms|custom."
+            )
+        target_file = self.root / clean / rel_path
         target_file.parent.mkdir(parents=True, exist_ok=True)
         target_file.write_text(content, encoding="utf-8")
         return target_file
@@ -296,19 +311,26 @@ class DocsStore:
         bytes_after = 0
 
         for item in sorted(self.root.rglob("*.md")):
-            if item.is_file() and not item.name.startswith("."):
-                try:
-                    content = item.read_text(encoding="utf-8", errors="replace")
-                    b_len = len(content.encode("utf-8"))
-                    bytes_before += b_len
-                    cleaned = prune_markdown(content)
-                    a_len = len(cleaned.encode("utf-8"))
-                    bytes_after += a_len
-                    if cleaned != content:
-                        item.write_text(cleaned, encoding="utf-8")
-                    files_pruned += 1
-                except Exception:
-                    pass
+            if not item.is_file() or item.name.startswith("."):
+                continue
+            try:
+                rel = item.relative_to(self.root)
+            except ValueError:
+                continue
+            if rel.parts and rel.parts[0] in DEFAULT_CATEGORIES:
+                continue
+            try:
+                content = item.read_text(encoding="utf-8", errors="replace")
+                b_len = len(content.encode("utf-8"))
+                bytes_before += b_len
+                cleaned = prune_markdown(content)
+                a_len = len(cleaned.encode("utf-8"))
+                bytes_after += a_len
+                if cleaned != content:
+                    item.write_text(cleaned, encoding="utf-8")
+                files_pruned += 1
+            except Exception:
+                pass
 
         return {
             "status": "success",

@@ -63,6 +63,26 @@ def build_parser() -> argparse.ArgumentParser:
     search_p.add_argument("--docset", default="all", help="Target docset (default: all)")
     search_p.add_argument("--top", type=int, default=3, help="Number of results (default: 3)")
 
+    # Write / add — positionals match Cordis generic property-value mapper
+    write_p = subparsers.add_parser(
+        "write",
+        aliases=["add"],
+        help="Append a hard tech fact (dated section). --overwrite replaces.",
+    )
+    write_p.add_argument("name", help="Document stem (e.g. coolify-db-ports)")
+    write_p.add_argument("content", help="Markdown fact body")
+    write_p.add_argument(
+        "category",
+        nargs="?",
+        default="custom",
+        help="stacks|models|apis|platforms|custom (default: custom)",
+    )
+    write_p.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Replace the entire document instead of appending",
+    )
+
     # Playbook sub-command
     playbook_p = subparsers.add_parser("playbook", help="View model metacognition & operational playbook")
     playbook_p.add_argument("model", nargs="?", default="auto", help="Model name or family (default: auto)")
@@ -108,6 +128,13 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     args = parser.parse_args(argv)
+    if args.command != "serve":
+        try:
+            from .updates import check_for_updates
+            check_for_updates("agents-docs", __version__)
+        except Exception:
+            pass
+
     store = DocsStore()
     engine = DocsEngine(store=store)
     fetcher = DocsFetcher(store=store)
@@ -190,6 +217,17 @@ def main(argv: list[str] | None = None) -> int:
             print(f"[{r['docset']}] {r['file']}#L{r['line']} -- {r['header']} (Score: {r['score']})")
             print(f"========================================================")
             print(r["snippet"])
+        return 0
+
+    elif args.command in ("write", "add"):
+        saved = store.save_doc(
+            name=args.name,
+            content=args.content,
+            category=args.category,
+            overwrite=bool(args.overwrite),
+        )
+        mode = "replaced" if args.overwrite else "wrote"
+        print(f"[OK] {mode} {saved}")
         return 0
 
     elif args.command == "playbook":

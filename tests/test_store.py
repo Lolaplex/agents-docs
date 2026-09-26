@@ -50,11 +50,11 @@ class TestDocsStore(unittest.TestCase):
 
         # 2. Get doc
         doc = self.store.get_doc("tailwind-v3", category="stacks")
-        self.assertEqual(doc, "# Tailwind v3 rules")
+        self.assertEqual(doc.strip(), "# Tailwind v3 rules")
 
         # 3. Get doc across all categories
         doc_all = self.store.get_doc("tailwind-v3")
-        self.assertEqual(doc_all, "# Tailwind v3 rules")
+        self.assertEqual(doc_all.strip(), "# Tailwind v3 rules")
 
         # 4. List docs
         docs = self.store.list_docs(category="stacks")
@@ -65,6 +65,39 @@ class TestDocsStore(unittest.TestCase):
         # 5. Delete doc
         self.assertTrue(self.store.delete_doc("tailwind-v3", category="stacks"))
         self.assertIsNone(self.store.get_doc("tailwind-v3"))
+
+    def test_save_doc_appends_by_default(self):
+        self.store.save_doc("coolify-db", "# Postgres 18\nport 5432", category="platforms")
+        self.store.save_doc("coolify-db", "still public 5432", category="platforms")
+        body = self.store.get_doc("coolify-db", "platforms")
+        self.assertIn("Postgres 18", body)
+        self.assertIn("port 5432", body)
+        self.assertIn("still public 5432", body)
+        self.assertRegex(body, r"## \d{4}-\d{2}-\d{2}")
+
+    def test_save_doc_overwrite_replaces(self):
+        self.store.save_doc("coolify-db", "old body", category="platforms")
+        self.store.save_doc("coolify-db", "new body", category="platforms", overwrite=True)
+        body = self.store.get_doc("coolify-db", "platforms")
+        self.assertEqual(body.strip(), "new body")
+        self.assertNotIn("old body", body)
+
+    def test_catalog_save_refuses_category_name(self):
+        with self.assertRaises(ValueError):
+            self.store.save_document("custom", "oops.md", "# no")
+
+    def test_prune_skips_category_sheets(self):
+        sheet = self.store.save_doc(
+            "keep-me",
+            "# Agent sheet\n<!-- edit this page on github -->\n",
+            category="custom",
+        )
+        raw = sheet.read_text(encoding="utf-8")
+        self.store.save_document("svelte-5", "docs.md", "# Lib\n<!-- edit this page on github -->\n")
+        self.store.prune_all_docsets()
+        self.assertEqual(sheet.read_text(encoding="utf-8"), raw)
+        cleaned = (self.temp_dir / "svelte-5" / "docs.md").read_text(encoding="utf-8")
+        self.assertNotIn("edit this page on github", cleaned.lower())
 
 
 if __name__ == "__main__":
