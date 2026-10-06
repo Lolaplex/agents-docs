@@ -18,6 +18,14 @@ from .fetcher import DocsFetcher
 from .store import DocsStore
 
 mcp = FastMCP("agents-docs")
+try:
+    from . import __version__
+    from .updates import attach_mcp_update_notice
+
+    attach_mcp_update_notice(mcp, "agents-docs", __version__)
+except Exception:
+    pass
+
 store = DocsStore()
 engine = DocsEngine(store=store)
 fetcher = DocsFetcher(store=store)
