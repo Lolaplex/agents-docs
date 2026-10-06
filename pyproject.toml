@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "agents-docs"
-version = "0.44.1"
+version = "0.45.0"
 description = "Local markdown docsets with header-aware BM25 search via CLI and MCP"
 readme = "README.md"
 license = "MIT"

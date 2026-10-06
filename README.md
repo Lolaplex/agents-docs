@@ -1,5 +1,7 @@
+<h1 align="center">.agents / docs</h1>
+
 <p align="center">
-  <a href="https://github.com/Lolaplex/agents-docs/releases"><img src="https://img.shields.io/badge/version-0.44.1-blue.svg?style=flat-square" alt="Version 0.44.1"></a>
+  <a href="https://github.com/Lolaplex/agents-docs/releases"><img src="https://img.shields.io/badge/version-0.45.0-blue.svg?style=flat-square" alt="Version 0.45.0"></a>
   <a href="https://modelcontextprotocol.io"><img src="https://img.shields.io/badge/MCP-Standard-orange.svg?style=flat-square" alt="MCP"></a>
   <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.10+-3776AB.svg?style=flat-square&logo=python&logoColor=white" alt="Python 3.10+"></a>
   <a href="https://pypi.org/project/agents-docs/"><img src="https://img.shields.io/pypi/v/agents-docs.svg?style=flat-square" alt="PyPI"></a>
