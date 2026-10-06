@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.45.0] - 2026-10-06
+
+### Added
+- CLI (and MCP, when present) check PyPI at most once per day for a newer release and print one stderr / tool-response line (`uv tool upgrade …`). Disabled with `AGENTS_NO_UPDATE_CHECK=1` or when `CI` is set; offline/timeout stays silent.
+
 ## [0.44.1] - 2026-09-26
 
 ### Changed
@@ -50,7 +55,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - In-place noise pruner that strips HTML wrappers and nav clutter without touching code blocks or tables.
 - Multi-IDE MCP and skills autowire (Cursor, Antigravity, Claude Desktop, Zed).
 
-[Unreleased]: https://github.com/Lolaplex/agents-docs/compare/v0.44.1...HEAD
+[Unreleased]: https://github.com/Lolaplex/agents-docs/compare/v0.45.0...HEAD
+[0.45.0]: https://github.com/Lolaplex/agents-docs/compare/v0.44.1...v0.45.0
 [0.44.1]: https://github.com/Lolaplex/agents-docs/compare/v0.44.0...v0.44.1
 [0.44.0]: https://github.com/Lolaplex/agents-docs/compare/v0.43.0...v0.44.0
 [0.43.0]: https://github.com/Lolaplex/agents-docs/compare/v0.42.0...v0.43.0
