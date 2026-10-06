@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- PyPI update check is silent when `CI` (or common CI env vars) is set, matching the rest of the suite. Still disabled with `AGENTS_NO_UPDATE_CHECK=1`.
+
+
 ## [0.44.1] - 2026-09-26
 
 ### Changed
